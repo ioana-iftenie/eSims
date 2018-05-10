@@ -1,0 +1,153 @@
+<admin-navigation></admin-navigation>
+<section class='admin-title-page-wrapper'>
+    <div class='title-wrapper'>
+        <h2 class='page-title'>Generate groups</h2>
+    </div>
+</section>
+
+
+<section class='generate-groups-wrapper main-wrapper-admin'>
+    <div class='group-wrapper'>
+        <div class='row'>
+            <div class='select-model col-md-4 col-sm-6 col-xs-12'>
+                <label>Select rank</label>
+                <div class='select-wrapper'>
+                    <select class='select' [(ngModel)]="rank" (change)='onChangeOptions()'>
+                        <option value='0'>Select rank</option>
+                        <option value="L">Licente</option>
+                        <option value="M">Master</option>
+                        <option value="D">Doctorat</option>
+                    </select>
+                    <i class='fa fa-angle-down'></i>
+                </div>
+            </div>
+
+            <div class='select-model col-md-4 col-sm-6 col-xs-12'>
+                <label>Select university year</label>
+                <div class='select-wrapper'>
+                    <select class='select' [(ngModel)]="universityYear" (change)='onChangeOptions()'>
+                        <option value='0'>Select university year</option>
+                        <option value="{{ year }}" *ngFor='let year of universityYearDr'>{{ year }}</option>
+                    </select>
+                    <i class='fa fa-angle-down'></i>
+                </div>
+            </div>
+
+            <div class='select-model col-md-4 col-sm-6 col-xs-12'>
+                <label>Select study year</label>
+                <div class='select-wrapper'>
+                    <select class='select' [(ngModel)]="studyYear" (change)='onChangeOptions()'>
+                        <option value='0'>Select study year</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    <i class='fa fa-angle-down'></i>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='select-model col-md-4 col-sm-6 col-xs-12'>
+                <label>Select student type</label>
+                <div class='select-wrapper'>
+                    <select class='select' [(ngModel)]="type" (change)='onChangeOptions()'>
+                        <option value='0'>Select student type</option>
+                        <option value="N">Normal</option>
+                        <option value="R">Reinmatriculat</option>
+                        <option value="C">Cursant</option>
+                    </select>
+                    <i class='fa fa-angle-down'></i>
+                </div>
+            </div>
+
+            <div class='select-model col-md-4 col-sm-6 col-xs-12'>
+                <label>Select language</label>
+                <div class='select-wrapper'>
+                    <select class='select' [(ngModel)]="language" (change)='onChangeOptions()'>
+                        <option value='0'>Select language</option>
+                        <option value="ro">Romanian</option>
+                        <option value="en">English</option>
+                    </select>
+                    <i class='fa fa-angle-down'></i>
+                </div>
+            </div>
+
+            <div class='select-model col-md-4 col-sm-6 col-xs-12'>
+                <label>Select specialize</label>
+                <div class='select-wrapper'>
+                    <select class='select' [(ngModel)]="specialize" (change)='onChangeOptions()'>
+                        <option value='0'>Select specialize</option>
+                        <option value="informatica">Informatica</option>
+                        <option value="sp1 master">Sp1 Master</option>
+                        <option value="sp2 master">Sp2 Master</option>
+                        <option value="sp1 doctorat">Sp1 Doctorat</option>
+                    </select>
+                    <i class='fa fa-angle-down'></i>
+                </div>
+            </div>
+        </div>
+
+        <hr *ngIf='displayGroups == true'/>
+
+        <div class='error-wrapper' *ngIf='errorMessage'>
+            <div class='error-message'>
+                {{ errorMessage }}
+            </div>
+        </div>
+
+        <div class='success-wrapper' *ngIf='successMessage'>
+            <div class='success-message'>
+                {{ successMessage }}
+            </div>
+        </div>
+
+        <form [formGroup]='groupNameForm'>
+            <div class='row' *ngIf='displayGroups == true'>
+                <div class='midyear-separation midyear-a col-md-6 col-sm-6 col-xs-12'>
+                    <p class='title'>Midyear A</p>
+                    <div class='one-group'>
+                        <label>Group Name</label>
+                        <input class='' placeholder='Group name...' value='' formControlName='groupA'>
+                        <button class='action-button' (click)='addGroup(1)'>Add another group</button>                            
+                    </div>                
+                
+                    <div class='group-A-wraper'>
+                        <div class='one-group' *ngFor='let group of groupsA; let i = index;'>
+                            <label>Group Name: </label>
+                            <span>{{ group }}</span>
+
+                            <div class='error-wrapper' (click)='deleteGroup(1, i)'>
+                                <span class='error-message'>
+                                    Delete
+                                </span>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                
+                <div class='midyear-separation col-md-6 col-sm-6 col-xs-12'>
+                    <p class='title'>Midyear B</p>
+                    <div class='one-group'>
+                        <label>(#{{ i }}) - Group Name</label>
+                        <input class='' placeholder='Group name...' formControlName='groupB'>
+                        <button class='action-button' (click)='addGroup(2)'>Add another group</button>
+                    </div>
+
+                    <div class='group-A-wraper'>
+                        <div class='one-group' *ngFor='let group of groupsB; let i = index;'>
+                            <label>Group Name: </label>
+                            <span>{{ group }}</span>
+
+                            <div class='error-wrapper' (click)='deleteGroup(2, i)'>
+                                <span class='error-message'>
+                                    Delete
+                                </span>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <button class='action-button' *ngIf='displayGroups == true' (click)='createGroups()'>Generate Groups</button>
+        </form>
+    </div>
+</section>

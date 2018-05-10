@@ -1,0 +1,30 @@
+<section class='main-wrapper login-main-wrapper'>
+    <div class='login-wrapper'>
+        <div class='logo-wrapper'>
+            <img src='assets/images/UAIC_logo2.png' alt='UAIC-logo'>
+        </div>
+
+        <div class='form-wrapper row'>
+            <span>Username</span>
+            <input type='text' class='col-md-12' [(ngModel)]='username'>
+            <span>Password</span>
+            <input type='password' class='col-md-12' [(ngModel)]='password'>
+            <button type='submit' (click)='submitLogin()' class='action-button col-md-12'>Login</button>
+
+            <div class='error-wrapper' *ngIf='errorMessage'>
+                <span class='error-message'>{{ errorMessage }}</span>
+            </div>
+        </div>
+    
+        <div class='aditional-form-info'>
+            <div class='one-item'>
+                <span>Forgot Password?</span>
+                <a href='/forgot-password'>Click here</a>
+            </div>
+            <div class='one-item'>
+                <span>Forgot Username?</span>
+                <a href='/forgot-username'>Click here</a>
+            </div>
+        </div>
+    </div>
+</section>

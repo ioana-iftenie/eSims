@@ -1,0 +1,45 @@
+@import '../../../../assets/less/variables.less';
+
+.study-plan-wrapper {
+
+    .option {
+        .with-button {
+            button {
+                margin-top: 0;
+            }
+        }
+    }
+
+    .study-plan {
+        padding: 20px;
+        background: @white;
+        border: 1px solid @mediumGray;
+
+        .small-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .small-text {
+            font-size: 12px;
+            margin-bottom: 0px;
+            color: @darkGreen;
+        }
+    }
+
+    .subjects-per-study-year {
+        margin-top: 20px;
+
+        .subjects-wrapper {
+            padding: 15px 0;
+            .subject {
+                .delete-subject {
+                    cursor: pointer;
+                    color: @darkError;
+                    padding-left: 15px;
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+}

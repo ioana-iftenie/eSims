@@ -1,0 +1,71 @@
+<section class='admin-navigation-wrapper' [class.hide-navigation]='hideNavigation'>
+    <span class='hide-navigation fa fa-angle-left' *ngIf='hideNavigation == false' (click)='hideNavigation = !hideNavigation'></span>
+    <span class='show-navigation fa fa-angle-right' *ngIf='hideNavigation == true' (click)='hideNavigation = !hideNavigation'></span>
+
+    <div class='admin-info'>
+        <div class='img-holder'>
+            <a href='/home'>
+                <i class="fa fa-user-circle-o admin" aria-hidden="true"></i>
+            </a>
+            <div class='info margin-t-15'>
+                {{ userInfo?.firstName }} {{ userInfo?.lastName }}
+            </div>
+        </div>
+        <div class='info-wrapper'>
+            <span class='info important'>
+                Admin
+            </span>
+        </div>
+    </div>
+
+    <div class='menu-holder' [class.menu-hide-navigation]='hideNavigation'>
+        <div class='one-card active'>
+            <div class='card-holder'>
+                <i class='icon fa fa-graduation-cap'></i>
+                <span class='menu-item'>
+                    Students
+                </span>
+            </div>
+        </div>
+
+        <div class='one-card'>
+            <div class='card-holder'>
+                <i class='icon fa fa-code'></i>
+                <span class='menu-item'>
+                    Professors
+                </span>
+            </div>
+        </div>
+
+        <div class='one-card'>
+            <div class='card-holder'>
+                <i class='icon fa fa-users'></i>
+                <span class='menu-item'>
+                    Groups
+                </span>
+            </div>
+        </div>
+
+        <div class='one-card'>
+            <div class='card-holder'>
+                <i class='icon fa fa-dot-circle-o'></i>
+                <span class='menu-item'>
+                    Marks
+                </span>
+            </div>
+        </div>
+
+        <div class='one-card'>
+            <div class='card-holder'>
+                <i class='icon fa fa-superpowers'></i>
+                <span class='menu-item'>
+                    Admin
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class='footer-section'>
+        <img src='assets/images/UAIC_logo4.png'>
+    </div>
+</section>

@@ -1,0 +1,125 @@
+<admin-navigation [userInfo]='userInfo'></admin-navigation>
+<section class='admin-title-page-wrapper'>
+    <div class='title-wrapper'>
+        <h2 class='page-title'>Study Plan</h2>
+    </div>
+</section>
+
+<section class='study-plan-wrapper main-wrapper-admin'>
+    <div class='study-plan container'>
+        <form [formGroup]='studyPlanForm'>
+            <h4 class='small-title'>Select Study Plan</h4>
+            <p class='small-text'>Please select from the following dropdowns in order to select the correct study year</p>
+            <p class='small-text'>Note that your action will NOT modify the database.</p>
+            <hr>
+
+            <div class='dropdowns-wrapper row'>
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Semester</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='semester'>
+                            <option *ngFor='let option of semestersArray' value='{{ option }}'>{{ option | semesterFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Study Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='studyYear'>
+                            <option *ngFor='let option of studyYearsArray' value='{{ option }}'>{{ option | studyYearFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Degree</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='rank'>
+                            <option *ngFor='let option of ranksArray' value='{{ option }}'>{{ option | rankFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>University Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='universityYear'>
+                            <option *ngFor='let option of universityYearsArray' value='{{ option }}'>{{ option }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Specialize</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='specialize'>
+                            <option *ngFor='let option of specializesArray' value='{{ option }}'>{{ option | specializeFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label></label>
+                    <div class='option-wrapper with-button'>
+                        <button class='action-button' (click)='createSubjectForm()'>Add Subjects</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+            <div class='subjects' *ngIf='studyYearId != null'>
+                <div class='study-plan container'>
+                    <h4 class='small-title'>Add Subjects to Study Plan</h4>
+                    <p class='small-text'>Please select multiple sujbect and add the to the new study plan</p>
+                    <p class='small-text'>Note that your action will modify the database.</p>
+                    <hr>
+
+                    <div class='search-subject row'>
+                        <div class='col-md-7'>
+                            <label class=''>Search by subject name</label>
+                            <div class='input-wrapper'>
+                                <input type='text' [(ngModel)]='searchSubject' (input)='searchSubjects()' placeholder='Search by name...'>
+                                <span class='sufix'>
+                                    <i class='fa fa-search'></i>
+                                </span>
+                                <div class='response' *ngIf='searchResponse != null'>
+                                    <div class='subject' *ngFor='let subject of searchResponse' (click)='selectedSubject(subject.id, subject.name)'>{{ subject.name }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='subjects-per-study-year' *ngIf='subjectsArray.length > 0'>
+                        <h4 class='small-title'>Subject added for this study plan</h4>
+                        <p class='small-text'>Add multiple subjects to the study plan</p>
+                        <p class='small-text'>When you finished adding subjects to the study plan, please click on the "Create Study Plan" button</p>
+                        <hr>
+
+                        <div class='subjects-wrapper' *ngIf='subjectsArray.length > 0'>
+                            <div class='subject' *ngFor='let subject of subjectsArray let i = index'>
+                                <label>{{ subject.subjectName }} </label>
+                                <span class='sufix delete-subject' (click)='deleteSubject(i)'><i class="fa fa-trash" aria-hidden="true"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button *ngIf='subjectsArray.length > 0' (click)='createStudyPlan()' class='action-button'>Create Study Plan</button>
+                </div>
+            </div>
+    </div>
+</section>

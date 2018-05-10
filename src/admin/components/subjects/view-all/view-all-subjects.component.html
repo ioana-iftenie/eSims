@@ -1,0 +1,58 @@
+<admin-navigation [userInfo]='userInfo'></admin-navigation>
+<section class='admin-title-page-wrapper'>
+    <div class='title-wrapper'>
+        <h2 class='page-title'>View all Subjects</h2>
+    </div>
+</section>
+
+<section class='create-update-subject-wrapper main-wrapper-admin'>
+    <div class='bachelors-mandatory-wrapper' *ngIf='bachelorArray.length > 0'>
+        <h4 class='rank-title'>Bachelor Subjects</h4>
+
+        <div class='subject-wrapper' *ngFor='let subject of bachelorArray'>
+            <div [class.active]='subject.statusInd == 1' [class.inactive]='subject.statusInd == 0' class='subject'>
+                <div class='basic-info'>
+                    <p class='name'>Name: {{  subject.name }}</p>
+                    <span class='banner banner-green' *ngIf='subject.isMandatory == 1 && subject.subjectCategory == null'>Mandatory</span>
+                    <span class='banner banner-green' *ngIf='subject.isMandatory == 1 && subject.subjectCategory != null'>Optional: {{ subject.subjectCategory}} </span>
+                    <span class='banner banner-green' *ngIf='subject.isMandatory == 0'>Optional General</span>
+                </div>
+
+                <div class='banners-wrapper'>
+                    <span class='banner banner-mustard'>Points: {{ subject.points }}</span>
+                    <span class='banner banner-mustard'>Specialize: {{subject.specialize}}</span>
+                    <span class='banner banner-mustard'>Year: {{ subject.studyYear}}</span>
+                    <span class='banner banner-mustard'>Semester: {{ subject.semester}}</span>
+                    <span *ngIf='subject.statusInd == 0' class='banner banner-error'>Status: INACTIVE</span>
+                    <span *ngIf='subject.statusInd == 1' class='banner banner-success'>Status: ACTIVE</span>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div class='bachelors-mandatory-wrapper' *ngIf='mastersArray.length > 0'>
+        <h4 class='rank-title'>Masters Subjects</h4>
+
+        <div class='subject-wrapper' *ngFor='let subject of mastersArray'>
+            <div [class.active]='subject.statusInd == 1' [class.inactive]='subject.statusInd == 0' class='subject'>
+                <div class='basic-info'>
+                    <p class='name'>Name: {{  subject.name }}</p>
+                    <span class='banner banner-green' *ngIf='subject.isMandatory == 1 && subject.subjectCategory == null'>Mandatory</span>
+                    <span class='banner banner-green' *ngIf='subject.isMandatory == 1 && subject.subjectCategory != null'>Optional: {{ subject.subjectCategory}} </span>
+                    <span class='banner banner-green' *ngIf='subject.isMandatory == 0'>Optional General</span>
+                </div>
+
+                <div class='banners-wrapper'>
+                    <span class='banner banner-mustard'>Points: {{ subject.points }}</span>
+                    <span class='banner banner-mustard'>Specialize: {{subject.specialize}}</span>
+                    <span class='banner banner-mustard'>Year: {{ subject.studyYear}}</span>
+                    <span class='banner banner-mustard'>Semester: {{ subject.semester}}</span>
+                    <span *ngIf='subject.statusInd == 0' class='banner banner-error'>Status: INACTIVE</span>
+                    <span *ngIf='subject.statusInd == 1' class='banner banner-success'>Status: ACTIVE</span>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</section>

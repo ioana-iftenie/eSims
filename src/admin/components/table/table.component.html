@@ -1,0 +1,70 @@
+<section class='display-table-wrapper'>
+    <i class='fa fa-times close-button'  (click)='emitCloseTable($event)'></i>
+
+    <div class='table-wrapper'>
+        <div class='error-wrapper' *ngIf='rowsToDisplay.message'>
+            <span class='error-message'>{{ rowsToDisplay.message }}</span>
+        </div>
+        <div class='table-holder'>
+            <table>
+                <tr class='table-header'>
+                    <th *ngFor='let head of rowsToDisplay.header'>
+                        {{ head }}
+                    </th>
+                </tr>
+                <tr *ngFor='let wrongRow of rowsToDisplay.wrongRows'>
+                    <td *ngIf='wrongRow.student_number'>{{ wrongRow.student_number }}</td>
+                    <td *ngIf='!wrongRow.student_number' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.first_name'>{{ wrongRow.first_name }}</td>
+                    <td *ngIf='!wrongRow.first_name' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.last_name'>{{ wrongRow.last_name }}</td>
+                    <td *ngIf='!wrongRow.last_name' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.mother_name'>{{ wrongRow.mother_name }}</td>
+                    <td *ngIf='!wrongRow.mother_name' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.father_name'>{{ wrongRow.father_name }}</td>
+                    <td *ngIf='!wrongRow.father_name' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.date_of_birth'>{{ wrongRow.date_of_birth }}</td>
+                    <td *ngIf='!wrongRow.date_of_birth' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.email'>{{ wrongRow.email }}</td>
+                    <td *ngIf='!wrongRow.email' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.webmail'>{{ wrongRow.webmail }}</td>
+                    <td *ngIf='!wrongRow.webmail' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.phone'>{{ wrongRow.phone }}</td>
+                    <td *ngIf='!wrongRow.phone' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.nationality'>{{ wrongRow.nationality }}</td>
+                    <td *ngIf='!wrongRow.nationality' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.citizenship'>{{ wrongRow.citizenship }}</td>
+                    <td *ngIf='!wrongRow.citizenship' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.gender'>{{ wrongRow.gender }}</td>
+                    <td *ngIf='!wrongRow.gender' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.cnp'>{{ wrongRow.cnp }}</td>
+                    <td *ngIf='!wrongRow.cnp' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.sign_up_mark'>{{ wrongRow.sign_up_mark }}</td>
+                    <td *ngIf='!wrongRow.sign_up_mark' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.language_id'>{{ wrongRow.language_id }}</td>
+                    <td *ngIf='!wrongRow.language_id' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.study_year_id'>{{ wrongRow.study_year_id }}</td>
+                    <td *ngIf='!wrongRow.study_year_id' class='empty-column'>empty</td>
+
+                    <td *ngIf='wrongRow.group'>{{ wrongRow.group }}</td>
+                    <td *ngIf='!wrongRow.group' class='empty-column'>empty</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>

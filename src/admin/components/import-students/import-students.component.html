@@ -1,0 +1,39 @@
+<div class='one-admin-card import-students-wrapper'>
+    <div class='card-element'>
+        <span class='card-title'>
+            Add New Students
+        </span>
+
+        <div class='card-body'>
+            <span class='card-description'>
+                Please enter a JSON file that contains the students that you want to be imported.
+                Note that this import will create entries in other tables.
+            </span>
+
+            <div class='input-holder row'>
+                <input type='file' class='original-file-input' #fileInput placeholder='Select JSON file...' (change)="readFile($event)">
+                <div class='display-instead-file col-lg-7 col-md-12'>
+                    <input type='text' placeholder="Please select a file..." [(ngModel)]='fileName'>
+                    <div class='file-icon' (click)='openFileExplorer($event)'>
+                        <i class="fa fa-folder-open" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class='button-holder no-margin-top'>
+                    <button class='action-button' (click)='importFile()'>Import file</button>
+                </div>
+            </div>
+        </div>
+
+        <div class='card-footer' *ngIf='isSuccess == true'>
+            <div class='success-wrapper'>
+                <div class='success-message'>
+                    {{ errorRows.message }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class='display-error-table' *ngIf='isSuccess == false && hideTable == false'>
+    <table-component [rowsToDisplay]="errorRows" (closeTable)='closeTable()'></table-component>
+</section>

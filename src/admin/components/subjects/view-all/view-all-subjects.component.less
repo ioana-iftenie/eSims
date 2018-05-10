@@ -1,0 +1,57 @@
+@import '../../../../assets/less/variables.less';
+
+.bachelors-mandatory-wrapper {
+    text-align: center;
+    margin-bottom: 30px;
+    
+    .subject-wrapper {
+        .subject {
+            display: block;
+            padding: 10px 20px;
+
+            .name {
+                margin-bottom: 5px;
+            }
+
+            .banner {
+                font-size: 14px;
+                color: white;
+                padding: 5px 15px;
+            }
+            
+            .banner-green {
+                background: @darkGreen;
+            }
+
+            .banner-mustard {
+                background: @mustard;
+            }
+
+            .banner-error {
+                background: @darkError;
+            }
+
+            .banner-success {
+                background: @green;
+            }
+
+            .basic-info {
+                display: inline-block;
+                margin-bottom: 20px;
+                
+                .name {
+                    display: inline;
+                }
+            }
+        }
+
+        &.active  {
+            color: @darkBlue;
+        }
+
+        &.inactive  {
+            color: @darkError;
+        }
+
+    }
+}

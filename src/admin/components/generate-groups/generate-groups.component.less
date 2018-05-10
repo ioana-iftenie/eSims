@@ -1,0 +1,73 @@
+@import '../../../assets/less/variables.less';
+
+.group-wrapper {
+    padding: 20px;
+    background: @white;
+    border: 1px solid @mediumGray;
+    height: 100%;
+
+    .select-model {
+        margin-bottom: 15px;
+
+        .select-wrapper {
+            position: relative;
+
+            .select {
+                height: 35px;
+                border: 1px solid @mediumGray;
+                padding: 0 10px;
+                border-radius: 3px;
+                color: @fontColorGray;
+                width: 100%;
+                
+                option {
+                    border: 1px solid red;
+                }
+            }
+
+            i {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 5px;
+                background: @white;
+                color: @fontColorGray;
+                width: 27px;
+                font-size: 25px;
+            }
+        }
+    }
+}
+
+label {
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 5px;
+    padding: 0 10px;
+}
+
+.midyear-separation {
+
+    &.midyear-a {
+        border-right: 1px solid @mediumGray;
+    }
+
+    .title {
+    }
+
+    .one-group {
+        margin-bottom: 15px;
+
+        .error-wrapper {
+            display: inline-block;
+            padding: 5px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+
+            .error-message {
+                font-size: 15px;
+            }
+        }
+    }
+}

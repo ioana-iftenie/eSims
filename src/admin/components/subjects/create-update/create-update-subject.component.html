@@ -1,0 +1,198 @@
+<admin-navigation [userInfo]='userInfo'></admin-navigation>
+<section class='admin-title-page-wrapper'>
+    <div class='title-wrapper'>
+        <h2 class='page-title'>Generate groups</h2>
+    </div>
+</section>
+
+<section class='create-update-subject-wrapper main-wrapper-admin'>
+    <div class='actions-section container'>
+        <div class='search-section row'>
+            <div class='col-md-7'>
+                <label class=''>Search by subject name</label>
+                <div class='input-wrapper'>
+                    <input type='text' [(ngModel)]='searchSubject' (input)='searchSubjects()' placeholder='Search by name...'>
+                    <span class='sufix'>
+                        <i class='fa fa-search'></i>
+                    </span>
+                    <div class='response' *ngIf='searchResponse != null'>
+                        <div class='subject' *ngFor='let subject of searchResponse' (click)='selectedSubject(subject.value)'>{{ subject.name }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-5 action-buttons'>
+                <div class='button-wrapper'>
+                    <button class='green-action-button' (click)='showSubjectForm()'>Create new Subject</button>
+                </div>
+                <a routerLink='/admin/subjects'>View all subjects</a>
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <section class='create-update container' *ngIf='displaySubjectForm == true'>
+        <form [formGroup]='subjectForm'>
+            <h4 class='small-title'>Create or Upadte Subject</h4>
+            <p class='small-text'>Please fill the following inputs</p>
+            <p class='small-text'>Note that your action will modify the database.</p>
+            <hr>
+            <div class='row'>
+                <div class='option col-lg-12'>
+                    <label>Is this subject active?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkbox" formControlName="statusInd" />
+                            <label for="checkbox"></label>
+                            <span class='text-checkbox'>Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-6 col-sm-6 col-xs-12'>
+                    <label>Name of the subject</label>
+                    <div class='option-wrapper'>
+                        <input type='text' placeholder='Name...' formControlName='name'>
+                        <span class='sufix big'>
+                            <i class='fa fa-keyboard-o' aria-hidden='true'></i>
+                        </span>
+                    </div>
+
+                    <div *ngIf='formErrors.name' class='error-wrapper small'>
+                        <div class='error-message'> {{ formErrors.name }} </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-3 col-sm-6 col-xs-12'>
+                    <label>Number of points</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='points'>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-3 col-sm-6 col-xs-12'>
+                    <label>Semester</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='semester'>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-3 col-sm-6 col-xs-12'>
+                    <label>Study Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='studyYear'>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-3 col-sm-6 col-xs-12'>
+                    <label>Degree</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='rank'>
+                            <option value='B'>Bachelor</option>
+                            <option value='M'>Master</option>
+                            <option value='D'>Doctorates</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class='option col-md-3 col-sm-6 col-xs-12'>
+                    <label>Exam Date</label>
+                    <div class='option-wrapper no-width'>
+                        <my-date-picker class='datepicker-wrapper' [options]='myDatePickerOptions' [placeholder]='placeholder' formControlName='examDate'></my-date-picker>
+                    </div>
+
+                    <div *ngIf='formErrors.examDate' class='error-wrapper small'>
+                        <div class='error-message'> {{ formErrors.examDate }} </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-3 col-sm-6 col-xs-12'>
+                    <label>Is Mandatory</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='isMandatory' (change)='onChangeMandatory()'>
+                            <option value='1'>Is Mandatory</option>
+                            <option value='0'>Is Optional</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-6 col-sm-6 col-xs-12'>
+                    <label>Specialize</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='specialize'>
+                            <option value='I'>Informatics</option>
+                            <option value='SE'>Software Engineering</option>
+                            <option value='CL'>Computational Linguistics</option>
+                            <option value='CO'>Computational Optimization</option>
+                            <option value='DS'>Distributed Systems</option>
+                            <option value='IS'>Information Security</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-3 col-sm-6 col-xs-12' *ngIf='displaySubjectCategory == true'>
+                    <label>Subject Category</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='subjectCategory'>
+                            <option value='G'>General</option>
+                            <option value='CO1'>CO1</option>
+                            <option value='CO2'>CO2</option>
+                            <option value='CO3'>CO3</option>
+                            <option value='CO4'>CO4</option>
+                            <option value='CO5'>CO5</option>
+                            <option value='CO6'>CO6</option>
+                            <option value='CO7'>CO7</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+
+            <button *ngIf='displayUpdateButton == false' class='action-button' (click)='addSubject()'>Add Subject</button>
+            <button *ngIf='displayUpdateButton == true' class='action-button' (click)='updateSubject()'>Update Subject</button>
+
+            
+            <div *ngIf='errorMessage' class='error-wrapper'>
+                <div class='error-message'> {{ errorMessage }} </div>
+            </div>
+
+            <div *ngIf='successMessage' class='success-wrapper'>
+                <div class='success-message'> {{ successMessage }} </div>
+            </div>
+        </form>
+    </section>
+</section>
