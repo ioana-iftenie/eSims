@@ -111,4 +111,18 @@ export class AdminService {
         return this.http.get(url, {})
         .catch(this.errorHandler.handleError)
     }
+
+    getStudentsByStudyYearId(studyYearId: any): Observable<any> {
+        let url = '/admins/subjects/get-students-for-study-year-id/' + studyYearId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError)
+    }
+
+    getMandatorySubjectsFromStudyPlan(studyYearId: any): Observable<any> {
+        let url = '/admins/subjects/get-mandatory-subjects-from-study-plan/' + studyYearId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError)
+    }
 }

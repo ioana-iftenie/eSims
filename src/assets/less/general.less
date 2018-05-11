@@ -45,6 +45,16 @@ html body {
                 background: @darkGreen;
             }
         }
+
+        &.reverse-action-button {
+            color: @lightBlue;
+            background: @white;
+            border: none;
+
+            &:hover {
+                background: @mediumGray;
+            }
+        }
     }
 
     .error-wrapper {
@@ -165,6 +175,11 @@ select::-ms-expand {
 .one-admin-card {
 
     background: #f1f1f1;
+
+    &.multi-steps {
+        background: @lightBlue;
+        color: white;
+    }
 
     .card-element {
         padding: 15px;

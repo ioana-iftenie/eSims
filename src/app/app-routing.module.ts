@@ -18,6 +18,8 @@ import { CreateUpdateSubjectComponent } from '../admin/components/subjects/creat
 import { ViewAllSubjectsComponent }     from '../admin/components/subjects/view-all/view-all-subjects.component';
 import { StudyPlanComponent }           from '../admin/components/subjects/study-plan/study-plan.component';
 import { ViewStudyPlanComponent }       from '../admin/components/subjects/view-study-plan/view-study-plan.component';
+import { ViewStudentComponent } from '../admin/components/view-student/view-student.component';
+import { AdminStudentSubjectComponent } from '../admin/components/subjects/student-subject/student-subject.component';
 
 const routes: Routes = [
     {
@@ -72,6 +74,16 @@ const routes: Routes = [
     {
       path: 'admin/view-study-plan',
       component: ViewStudyPlanComponent,
+      canActivate: [VerifyAdminService]
+    },
+    {
+      path: 'admin/view-students',
+      component: ViewStudentComponent,
+      canActivate: [VerifyAdminService]
+    },
+    {
+      path: 'admin/create-student-subject',
+      component: AdminStudentSubjectComponent,
       canActivate: [VerifyAdminService]
     },
     {

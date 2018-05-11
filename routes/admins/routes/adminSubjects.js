@@ -172,4 +172,28 @@ router.get('/get-subjects-from-study-plan/:studyPlanId', function(req, res) {
     })
 })
 
+// -------- Start Routes For Students Subject ------
+
+router.get('/get-students-for-study-year-id/:studyYearId', function(req, res) {
+    let query = "SELECT S.ID AS id, S.STUDENT_NUMBER AS studentNumber, CONCAT(S.FIRST_NAME, ' ', S.LAST_NAME) AS name FROM STUDENT S INNER JOIN STUDENT_INFO SI ON S.ID = SI.STUDENT_ID WHERE SI.STUDY_YEAR_ID = ?";
+
+    connection.query(query, req.params.studyYearId, function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
+    })
+})
+
+router.get('/get-mandatory-subjects-from-study-plan/:studyYearId', function(req, res) {
+    let query = 'SELECT S.ID AS id, S.NAME AS name FROM STUDY_PLAN SP INNER JOIN SUBJECT S ON SP.SUBJECT_ID = S.ID WHERE SP.STUDY_YEAR_ID = ? AND S.IS_MANDATORY = 1 AND S.OPTIONAL_GROUP IS NULL';
+
+    connection.query(query, [req.params.studyYearId], function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
+    })
+})
+
+// -------- End Routes For Students Subject ------
+
 module.exports = router;

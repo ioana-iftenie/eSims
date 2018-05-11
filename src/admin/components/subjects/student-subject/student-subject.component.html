@@ -1,13 +1,13 @@
 <admin-navigation [userInfo]='userInfo'></admin-navigation>
 <section class='admin-title-page-wrapper'>
     <div class='title-wrapper'>
-        <h2 class='page-title'>Study Plan</h2>
+        <h2 class='page-title'>Add Subjects to Students</h2>
     </div>
 </section>
 
 <section class='study-plan-wrapper main-wrapper-admin'>
     <div class='study-plan container'>
-        <form [formGroup]='studyPlanForm'>
+        <form [formGroup]='studentSubjectForm'>
             <h4 class='small-title'>Select Study Plan</h4>
             <p class='small-text'>Please select from the following dropdowns in order to select the correct study year</p>
             <p class='small-text'>Note that your action will NOT modify the database.</p>
@@ -77,50 +77,52 @@
                 <div class='option col-md-4 col-sm-6 col-xs-12'>
                     <label></label>
                     <div class='option-wrapper with-button'>
-                        <button class='action-button' (click)='createSubjectForm()'>Add Subjects</button>
+                        <button class='action-button' (click)='getStudyYearId()' [disabled]='disableStudyYearButton'>Get Study Year</button>
                     </div>
                 </div>
             </div>
         </form>
 
+        <div *ngIf='successMessage != null' class='success-wrapper'>
+            <div class='success-message'> {{ successMessage }} </div>
+        </div>
+    
+        <div *ngIf='errorMessage != null' class='error-wrapper'>
+            <div class='error-message'> {{ errorMessage }} </div>
+        </div>
+
         <div class='subjects' *ngIf='studyYearId != null'>
             <div class='study-plan container'>
-                <h4 class='small-title'>Add Subjects to Study Plan</h4>
-                <p class='small-text'>Please select multiple sujbect and add the to the new study plan</p>
-                <p class='small-text'>Note that your action will modify the database.</p>
-                <hr>
+                <div *ngIf='currentStep == 2'>
+                    <h4 class='small-title'>Search for students based on the study year id selected</h4>
+                    <p class='small-text'>There are multiple steps untill adding the subjects to the students.</p>
+                    <hr>
+                    <button class='action-button' (click)='getStudents()' [disabled]='disableStudentButton'>Get Students</button>
+                </div>
+                <div *ngIf='currentStep == 3'>
+                    <h4 class='small-title'>Search for mandatory subjects</h4>
+                    <p class='small-text'>Get only the mandatory subjects from study plan.</p>
+                    <hr>
+                    <button class='action-button' (click)='getStudyPlanSubjects()'>Get Study Plan Subjects</button>
+                </div>
+                
+                <div class='no-results' *ngIf='displayStudents == true && studentsArray.length == 0'>
+                   <div class='no-results-text'>No students were added to this Study Year ID</div>
+                </div>
 
-                <div class='search-subject row'>
-                    <div class='col-md-7'>
-                        <label class=''>Search by subject name</label>
-                        <div class='input-wrapper'>
-                            <input type='text' [(ngModel)]='searchSubject' (input)='searchSubjects()' placeholder='Search by name...'>
-                            <span class='sufix'>
-                                <i class='fa fa-search'></i>
-                            </span>
-                            <div class='response' *ngIf='searchResponse != null'>
-                                <div class='subject' *ngFor='let subject of searchResponse' (click)='selectedSubject(subject.id, subject.name)'>{{ subject.name }}</div>
+                <div class='students-wrapper'>
+                    <div class='student' *ngFor='let student of studentsArray'>
+                        <span>{{ student.id }} - </span>
+                        <span>{{ student.studentNumber }} - </span>
+                        <span>{{ student.name }}</span>
+
+                        <div class='subjects-wrapper' *ngIf='student.subjects != undefined'>
+                            <div class='subject' *ngFor='let subject of student.subjects'>
+                                <span>{{ subject.id }}</span>
+                                <span>{{ subject.name }}</span>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class='subjects-per-study-year' *ngIf='subjectsArray.length > 0'>
-                    <h4 class='small-title'>Subject added for this study plan</h4>
-                    <p class='small-text'>Add multiple subjects to the study plan</p>
-                    <p class='small-text'>When you finished adding subjects to the study plan, please click on the "Create Study Plan" button</p>
-                    <hr>
-
-                    <div class='subjects-wrapper' *ngIf='subjectsArray.length > 0'>
-                        <div class='subject' *ngFor='let subject of subjectsArray let i = index'>
-                            <label>{{ subject.subjectName }} </label>
-                            <span class='sufix delete-subject' (click)='deleteSubject(i)'><i class="fa fa-trash" aria-hidden="true"></i></span>
-                        </div>
-                    </div>
-                </div>
-                <button *ngIf='subjectsArray.length > 0' (click)='createStudyPlan()' class='action-button'>Create Study Plan</button>
-                <div *ngIf='successMessage != null' class='success-wrapper'>
-                    <div class='success-message'> {{ successMessage }} </div>
                 </div>
             </div>
         </div>

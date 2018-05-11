@@ -23,6 +23,10 @@ import { StudyPlanCardComponent } from './components/cards/subjects/study-plan/s
 import { StudyPlanComponent } from './components/subjects/study-plan/study-plan.component';
 import { ViewStudyPlanCardComponent } from './components/cards/subjects/view-study-plan/view-study-plan.component';
 import { ViewStudyPlanComponent } from './components/subjects/view-study-plan/view-study-plan.component';
+import { ViewStudentCardComponent } from './components/cards/view-student/view-student-card.component';
+import { ViewStudentComponent } from './components/view-student/view-student.component';
+import { AdminStudentSubjectCardComponent } from './components/cards/subjects/student-subject/student-subject.component';
+import { AdminStudentSubjectComponent } from './components/subjects/student-subject/student-subject.component';
 
 
 @NgModule({
@@ -34,12 +38,16 @@ import { ViewStudyPlanComponent } from './components/subjects/view-study-plan/vi
     GenerateGroupsComponent, // Remove wen needed
     CreateUpdateSubjectCardComponent,
     ViewAllSubjectsCardComponent,
+    ViewStudentCardComponent,
     StudyPlanCardComponent,
     ViewStudyPlanCardComponent,
+    AdminStudentSubjectCardComponent,
     CreateUpdateSubjectComponent,
     ViewAllSubjectsComponent,
     StudyPlanComponent,
-    ViewStudyPlanComponent
+    ViewStudyPlanComponent,
+    ViewStudentComponent,
+    AdminStudentSubjectComponent
   ],
   imports: [
     BrowserModule,
@@ -61,12 +69,16 @@ import { ViewStudyPlanComponent } from './components/subjects/view-study-plan/vi
     GenerateGroupsComponent,
     CreateUpdateSubjectCardComponent,
     ViewAllSubjectsCardComponent,
+    ViewStudentCardComponent,
     StudyPlanCardComponent,
     ViewStudyPlanCardComponent,
+    AdminStudentSubjectCardComponent,
     CreateUpdateSubjectComponent,
     ViewAllSubjectsComponent,
     StudyPlanComponent,
-    ViewStudyPlanComponent
+    ViewStudyPlanComponent,
+    ViewStudentComponent,
+    AdminStudentSubjectComponent
   ],
   bootstrap: []
 })
