@@ -55,131 +55,136 @@ router.post('/import-students', function(req, res, next) {
         })
 
         promiseWrongRows.then(function(response) {
-            
+
             if (response.length == 0) {
 
                 let studentTable = [];
                 let userTable = [];
 
-                data.forEach((student) => {
+                promiseBulkInsert = new Promise(function(resolve, reject) {
+                    let responseToSend = {};
 
-                    let studentInfoTemp = {
-                        student_id: '',
-                        study_year_id: student.study_year_id,
-                        is_bursier: 0,
-                        is_exmatriculat: 0,
-                        is_restant: 0,
-                        is_bugetar: null,
-                        is_reinmatriculat: 0,
-                        group: student.group
-                    }
-                    
-                    let studentTemp = {
-                        student_number: student.student_number,
-                        first_name: student.first_name,
-                        last_name: student.last_name,
-                        mother_name: student.mother_name,
-                        father_name: student.father_name,
-                        date_of_birth: student.date_of_birth,
-                        email: student.email,
-                        webmail: student.webmail,
-                        phone: student.phone,
-                        nationality: student.nationality,
-                        citizenship: student.citizenship,
-                        gender: student.gender,
-                        cnp: student.cnp,
-                        sign_up_mark: student.sign_up_mark,
-                        language_id: student.language_id
-                    };
-                    studentTable.push(studentTemp);
+                    data.forEach((student) => {                      
+                        
+                        let studentTemp = {
+                            student_number: student.student_number,
+                            first_name: student.first_name,
+                            last_name: student.last_name,
+                            mother_name: student.mother_name,
+                            father_name: student.father_name,
+                            date_of_birth: student.date_of_birth,
+                            email: student.email,
+                            webmail: student.webmail,
+                            phone: student.phone,
+                            nationality: student.nationality,
+                            citizenship: student.citizenship,
+                            gender: student.gender,
+                            cnp: student.cnp,
+                            sign_up_mark: student.sign_up_mark,
+                            language_id: student.language_id
+                        };
+                        studentTable.push(studentTemp);
 
-                    connection.beginTransaction(function(err) {
-                        if (err) { throw err; }
+                        connection.beginTransaction(function(err) {
+                            if (err) { throw err; }
 
-                        connection.query('INSERT INTO STUDENT SET ?', studentTemp, function(err, result) {
-                            if (err) { 
-                                connection.rollback(function() {
-                                    throw err;
+                            connection.query('INSERT INTO STUDENT SET ?', studentTemp, function(err, result) {
+                                if (err) { 
+                                    connection.rollback(function() {
+                                        throw err;
 
-                                    let responseToSend = {
-                                        errorCode: 1,
-                                        message: 'Cound not insert student into table!'
-                                    }
+                                        responseToSend = {
+                                            errorCode: 1,
+                                            message: 'Cound not insert student into table!'
+                                        }
+                                        
+                                        res.send(responseToSend);
+                                    });
+                                } else {
+                                    let studentId = result.insertId;
                                     
-                                    res.send(responseToSend);
-                                });
-                            } else {
-                                let studentId = result.insertId;
-                                
-                                let userTemp = {
-                                    username: student.student_number,
-                                    password: "student",
-                                    outer_id: studentId,
-                                    is_admin: 0,
-                                    is_student: 1,
-                                    is_professor: 0,
-                                    created_date: new Date().toLocaleString(),
-                                    last_updated: new Date().toLocaleString()
-                                };
+                                    let userTemp = {
+                                        username: student.student_number,
+                                        password: "student",
+                                        outer_id: studentId,
+                                        is_admin: 0,
+                                        is_student: 1,
+                                        is_professor: 0,
+                                        created_date: new Date().toLocaleString(),
+                                        last_updated: new Date().toLocaleString()
+                                    };
 
-                                connection.query('INSERT INTO USER SET ?', userTemp, function(errUser, resultUser) {
-                                    if (errUser) { 
-                                        connection.rollback(function() {
-                                            throw errUser;
+                                    connection.query('INSERT INTO USER SET ?', userTemp, function(errUser, resultUser) {
+                                        if (errUser) { 
+                                            connection.rollback(function() {
+                                                throw errUser;
 
-                                            let responseToSend = {
-                                                errorCode: 1,
-                                                message: 'Cound not insert user in table!'
-                                            }
-                                            
-                                            res.send(responseToSend);
-                                        });
-                                    } else {
-                                        studentInfoTemp.student_id = studentId;
+                                                responseToSend = {
+                                                    errorCode: 1,
+                                                    message: 'Cound not insert user in table!'
+                                                }
+                                                
+                                            });
+                                        } else {
+                                            let studentInfoTemp = []
+                                            let temp = [];
+                                            temp.push(studentId, parseInt(student.study_year_id.split(', ')[0]), 0, 0, 0, null, 0, student.group);
+                                            studentInfoTemp.push(temp);
+                                            temp = [];
+                                            temp.push(studentId, parseInt(student.study_year_id.split(', ')[1]), 0, 0, 0, null, 0, student.group);
+                                            studentInfoTemp.push(temp);
 
-                                        connection.query('INSERT INTO STUDENT_INFO SET ?', studentInfoTemp, function(errStudentInfo, resultStudentInfo) {
-                                            if (errStudentInfo) { 
-                                                connection.rollback(function() {
-                                                    throw errStudentInfo;
-
-                                                    let responseToSend = {
-                                                        errorCode: 1,
-                                                        message: 'Cound not insert into STUDENT_INFO table!'
-                                                    }
-                                                    
-                                                    res.send(responseToSend);
-                                                });
-                                            } else {
-                                                connection.commit(function(errOnCommit) {
-                                                    if (errOnCommit) { 
+                                            connection.query('INSERT INTO STUDENT_INFO (STUDENT_ID, STUDY_YEAR_ID, IS_BURSIER, IS_EXMATRICULAT, IS_RESTANT, IS_BUGETAR, IS_REINMATRICULAT, GROUP_NAME) VALUES ?', [studentInfoTemp], function(errStudentInfo, resultStudentInfo) {
+                                                if (errStudentInfo) { 
                                                     connection.rollback(function() {
-                                                        throw errOnCommit;
+                                                        throw errStudentInfo;
 
-                                                        let responseToSend = {
+                                                        responseToSend = {
                                                             errorCode: 1,
-                                                            message: 'Cound not commit!'
+                                                            message: 'Cound not insert into STUDENT_INFO table!'
                                                         }
-                                                        
-                                                        res.send(responseToSend);
                                                     });
-                                                    }
-                                                    console.log('Transaction Complete.');
-                                                    connection.end();
+                                                } else {
+                                                    connection.commit(function(errOnCommit) {
+                                                        if (errOnCommit) { 
+                                                        connection.rollback(function() {
+                                                            throw errOnCommit;
 
-                                                    let responseToSend = {
-                                                        errorCode: 0,
-                                                        message: 'Students were imported successfully!'
-                                                    }
-                                                    
-                                                    res.send(responseToSend);
-                                                });
-                                            }
-                                        })
-                                    }  
-                                })
-                            }
+                                                            responseToSend = {
+                                                                errorCode: 1,
+                                                                message: 'Cound not commit!'
+                                                            }
+                                                            
+                                                            // res.send(responseToSend);
+                                                        });
+                                                        }
+                                                        console.log('Transaction Complete.');
+
+                                                        responseToSend = {
+                                                            errorCode: 0,
+                                                            message: 'Students were imported successfully!'
+                                                        }
+                                                        connection.end();
+                                                    });
+                                                }
+                                            })
+                                        }  
+                                    })
+                                }
+                            })
                         })
                     })
+
+                    resolve(responseToSend);
+                    reject("Insert went wrong");
+                })
+
+                console.log(response);
+
+                promiseBulkInsert.then(function(response) {
+                    if (response != null) {
+                        res.send(response);
+                    }
                 })
             } else {
                 let temp = {

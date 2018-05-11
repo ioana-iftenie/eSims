@@ -17,6 +17,7 @@ import { VerifyUserService }            from '../core/services/verify-user.servi
 import { CreateUpdateSubjectComponent } from '../admin/components/subjects/create-update/create-update-subject.component';
 import { ViewAllSubjectsComponent }     from '../admin/components/subjects/view-all/view-all-subjects.component';
 import { StudyPlanComponent }           from '../admin/components/subjects/study-plan/study-plan.component';
+import { ViewStudyPlanComponent }       from '../admin/components/subjects/view-study-plan/view-study-plan.component';
 
 const routes: Routes = [
     {
@@ -66,6 +67,11 @@ const routes: Routes = [
     {
       path: 'admin/study-plan',
       component: StudyPlanComponent,
+      canActivate: [VerifyAdminService]
+    },
+    {
+      path: 'admin/view-study-plan',
+      component: ViewStudyPlanComponent,
       canActivate: [VerifyAdminService]
     },
     {

@@ -149,66 +149,27 @@ router.post('/get-study-year', function(req, res) {
 })
 
 router.post('/create-study-plan', function(req, res) {
-    let query = 'INSERT INTO STUDY_PLAN SET ?';
-    console.log(req.body.data);
+    let query = 'INSERT INTO STUDY_PLAN (STUDY_YEAR_ID, SUBJECT_ID) VALUES ?';
 
-    promiseStatusCode = new Promise(function(resolve, reject) {
-        let responseToSend = {
+    connection.query(query, [req.body.data], function(err, result) {
+        if (err) throw err;
+
+        let done = {
             errorCode: 0,
-            message: ''
+            message: 'Study plan successfuly created'
         }
-        req.body.data.forEach(element => {
-            let temp = {
-                study_year_id: element.study_year_id,
-                subject_id: element.subject_id
-            }
-            connection.beginTransaction(function(err) {
-                if (err) { throw err; }
-
-                connection.query(query, temp, function(err, result) {
-                    if (err) { 
-                        connection.rollback(function() {
-                            throw err;
-
-                            responseToSend = {
-                                errorCode: 1,
-                                message: 'Cound not insert study plan into table!'
-                            }
-                            
-                        });
-                    } else {
-                        connection.commit(function(errOnCommit) {
-                            if (errOnCommit) { 
-                                connection.rollback(function() {
-                                    throw errOnCommit;
-
-                                    responseToSend = {
-                                        errorCode: 1,
-                                        message: 'Cound not commit!'
-                                    }
-                                    
-                                });
-                            }
-                            console.log('Transaction Complete.');
-                            responseToSend = {
-                                errorCode: 0,
-                                message: 'Study Plan was successfully created!'
-                            }
-                            connection.end();
-                        });
-                    }
-
-                })
-            })
-        })
-        resolve(responseToSend);
-        reject("Something went wrong.");
+        res.send(done);
     })
+})
 
-    promiseStatusCode.then(function(response) {
-        res.send(response);
+router.get('/get-subjects-from-study-plan/:studyPlanId', function(req, res) {
+    let query = 'SELECT S.NAME AS name, S.OPTIONAL_GROUP AS optionalGroup FROM STUDY_PLAN SP INNER JOIN SUBJECT S ON SP.SUBJECT_ID = S.ID WHERE SP.STUDY_YEAR_ID = ? ORDER BY S.IS_MANDATORY DESC';
+
+    connection.query(query, [req.params.studyPlanId], function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
     })
-
 })
 
 module.exports = router;

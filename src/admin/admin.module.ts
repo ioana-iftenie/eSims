@@ -21,6 +21,8 @@ import { ViewAllSubjectsComponent }           from './components/subjects/view-a
 import { MyDatePickerModule }			from 'mydatepicker';
 import { StudyPlanCardComponent } from './components/cards/subjects/study-plan/study-plan.component';
 import { StudyPlanComponent } from './components/subjects/study-plan/study-plan.component';
+import { ViewStudyPlanCardComponent } from './components/cards/subjects/view-study-plan/view-study-plan.component';
+import { ViewStudyPlanComponent } from './components/subjects/view-study-plan/view-study-plan.component';
 
 
 @NgModule({
@@ -33,9 +35,11 @@ import { StudyPlanComponent } from './components/subjects/study-plan/study-plan.
     CreateUpdateSubjectCardComponent,
     ViewAllSubjectsCardComponent,
     StudyPlanCardComponent,
+    ViewStudyPlanCardComponent,
     CreateUpdateSubjectComponent,
     ViewAllSubjectsComponent,
-    StudyPlanComponent
+    StudyPlanComponent,
+    ViewStudyPlanComponent
   ],
   imports: [
     BrowserModule,
@@ -58,9 +62,11 @@ import { StudyPlanComponent } from './components/subjects/study-plan/study-plan.
     CreateUpdateSubjectCardComponent,
     ViewAllSubjectsCardComponent,
     StudyPlanCardComponent,
+    ViewStudyPlanCardComponent,
     CreateUpdateSubjectComponent,
     ViewAllSubjectsComponent,
-    StudyPlanComponent
+    StudyPlanComponent,
+    ViewStudyPlanComponent
   ],
   bootstrap: []
 })

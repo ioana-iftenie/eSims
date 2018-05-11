@@ -8,13 +8,13 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 
 @Component({
-    selector: 'study-plan',
-    templateUrl: './study-plan.component.html',
-    styleUrls: ['./study-plan.component.less'],
+    selector: 'view-study-plan',
+    templateUrl: './view-study-plan.component.html',
+    styleUrls: ['./view-study-plan.component.less'],
     providers: [AdminService]
 })
 
-export class StudyPlanComponent {
+export class ViewStudyPlanComponent {
 
     alive: boolean;
     semestersArray: any[];
@@ -26,11 +26,7 @@ export class StudyPlanComponent {
     studyPlanForm: FormGroup;
 
     studyYearId: any = null;
-    searchSubject: string;
-    searchResponse: any[];
-
-    subjectsArray: any[];
-    subjectArrayToSend: any[];
+    subjectArray: any[];
 
     successMessage: string = null;
     errorMessage: string = null;
@@ -46,9 +42,6 @@ export class StudyPlanComponent {
         this.universityYearsArray = [];
         this.specializesArray = [];
         this.createForm();
-
-        this.subjectsArray = [];
-        this.subjectArrayToSend = [];
 
         this.adminService.getStudyYears()
         .takeWhile(() => this.alive)
@@ -91,7 +84,9 @@ export class StudyPlanComponent {
         this.studyPlanForm = this.fb.group(studyPlanFormGroup);
     }
 
-    createSubjectForm(): void {
+    searchSubjects(): void {
+        this.subjectArray = [];
+
         let temp = {
             name: this.studyPlanForm.value['specialize'],
             studyYear: this.studyPlanForm.value['studyYear'],
@@ -105,78 +100,19 @@ export class StudyPlanComponent {
         .subscribe(
             response => {
                 this.studyYearId = response[0].ID;
+
+                this.adminService.getSubjectsFromStudyPlan(this.studyYearId)
+                .takeWhile(() => this.alive)
+                .subscribe(
+                    response => {
+                        console.log(response);
+                        this.subjectArray = response;
+                    },
+                    error => {
+                        console.log(error);
+                    }
+                )
             }, error => {
-                console.log(error);
-            }
-            )
-    }
-
-    searchSubjects(): void {
-        this.searchResponse = null;
-
-        let temp = {
-            searchString: this.searchSubject,
-            semester: this.studyPlanForm.value['semester'],
-            studyYear: this.studyPlanForm.value['studyYear'],
-            rank: this.studyPlanForm.value['rank'],
-            specialize: this.studyPlanForm.value['specialize'],
-        }
-        this.adminService.searchSubjectsByStudyYear(temp)
-        .takeWhile(() => this.alive)
-        .subscribe(
-            response => {             
-                this.searchResponse = [];
-                this.searchResponse = response;
-            },
-            error => {
-                console.log(error)
-            }
-        );
-    }
-
-    selectedSubject(id: any, name: string): void {
-        this.searchResponse = null;
-        this.searchSubject = '';
-
-        let temp = {
-            subjectId: id,
-            subjectName: name,
-            studyYearId: this.studyYearId
-        }
-        let ok = 1;
-        this.subjectsArray.forEach(element => {
-            if (element.subjectId == temp.subjectId) {
-                ok = 0;
-                return;
-            }
-        });
-        if (ok == 1) {
-            this.subjectsArray.push(temp);
-            let data = [];
-            data.push(this.studyYearId);
-            data.push(id);
-
-            this.subjectArrayToSend.push(data);
-
-        }
-    }
-
-    deleteSubject(index: number): void {
-        this.subjectsArray.splice(index, 1);
-        this.subjectArrayToSend.splice(index, 1);
-        console.log(this.subjectArrayToSend);
-    }
-
-    createStudyPlan(): void {
-        this.adminService.createStudyPlan(this.subjectArrayToSend)
-        .takeWhile(() => (this.alive))
-        .subscribe(
-            response => {
-               if (response.errorCode == 0) {
-                    this.successMessage = response.message;
-               }
-            },
-            error => {
                 console.log(error);
             }
         )

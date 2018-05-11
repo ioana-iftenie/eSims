@@ -1,7 +1,7 @@
 <admin-navigation [userInfo]='userInfo'></admin-navigation>
 <section class='admin-title-page-wrapper'>
     <div class='title-wrapper'>
-        <h2 class='page-title'>Study Plan</h2>
+        <h2 class='page-title'>View / Search Study Plan</h2>
     </div>
 </section>
 
@@ -77,52 +77,37 @@
                 <div class='option col-md-4 col-sm-6 col-xs-12'>
                     <label></label>
                     <div class='option-wrapper with-button'>
-                        <button class='action-button' (click)='createSubjectForm()'>Add Subjects</button>
+                        <button class='action-button' (click)='searchSubjects()'>See Study Plan</button>
                     </div>
                 </div>
             </div>
         </form>
 
-            <div class='subjects' *ngIf='studyYearId != null'>
-                <div class='study-plan container'>
-                    <h4 class='small-title'>Add Subjects to Study Plan</h4>
-                    <p class='small-text'>Please select multiple sujbect and add the to the new study plan</p>
-                    <p class='small-text'>Note that your action will modify the database.</p>
-                    <hr>
+        <div class='subjects' *ngIf='studyYearId != null'>
+            <div class='study-plan container'>
+                <h4 class='small-title'>Subjects based on the study plan created</h4>
+                <p class='small-text'>You cannot modify the study plan</p>
+                <hr>
 
-                    <div class='search-subject row'>
-                        <div class='col-md-7'>
-                            <label class=''>Search by subject name</label>
-                            <div class='input-wrapper'>
-                                <input type='text' [(ngModel)]='searchSubject' (input)='searchSubjects()' placeholder='Search by name...'>
-                                <span class='sufix'>
-                                    <i class='fa fa-search'></i>
-                                </span>
-                                <div class='response' *ngIf='searchResponse != null'>
-                                    <div class='subject' *ngFor='let subject of searchResponse' (click)='selectedSubject(subject.id, subject.name)'>{{ subject.name }}</div>
-                                </div>
-                            </div>
-                        </div>
+                <div class='subject-array' *ngIf='subjectArray.length > 0'>
+                    <div class='subject' *ngFor='let subject of subjectArray' [class.mandatory]='subject.optionalGroup == null'>
+                        <span>{{ subject.name }}</span>
+                        <span *ngIf='subject.optionalGroup != null'> - {{ subject.optionalGroup }}</span>
+                        <span *ngIf='subject.optionalGroup == null'> - Mandatory </span>
                     </div>
+                </div>
 
-                    <div class='subjects-per-study-year' *ngIf='subjectsArray.length > 0'>
-                        <h4 class='small-title'>Subject added for this study plan</h4>
-                        <p class='small-text'>Add multiple subjects to the study plan</p>
-                        <p class='small-text'>When you finished adding subjects to the study plan, please click on the "Create Study Plan" button</p>
-                        <hr>
-
-                        <div class='subjects-wrapper' *ngIf='subjectsArray.length > 0'>
-                            <div class='subject' *ngFor='let subject of subjectsArray let i = index'>
-                                <label>{{ subject.subjectName }} </label>
-                                <span class='sufix delete-subject' (click)='deleteSubject(i)'><i class="fa fa-trash" aria-hidden="true"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                    <button *ngIf='subjectsArray.length > 0' (click)='createStudyPlan()' class='action-button'>Create Study Plan</button>
+                <div class='no-results' *ngIf='subjectArray.length == 0'>
+                    <label class='no-results-text'>Study Plan hasn't been created for the elements selected.</label>
                 </div>
             </div>
+        </div>
     </div>
     <div *ngIf='successMessage != null' class='success-wrapper'>
         <div class='success-message'> {{ successMessage }} </div>
+    </div>
+
+    <div *ngIf='errorMessage != null' class='error-wrapper'>
+        <div class='error-message'> {{ errorMessage }} </div>
     </div>
 </section>

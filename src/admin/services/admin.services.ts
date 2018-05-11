@@ -104,4 +104,11 @@ export class AdminService {
         return this.http.post(url, data)
         .catch(this.errorHandler.handleError);
     }
+
+    getSubjectsFromStudyPlan(studyPlanId: any): Observable<any> {
+        let url = '/admins/subjects/get-subjects-from-study-plan/' + studyPlanId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError)
+    }
 }
