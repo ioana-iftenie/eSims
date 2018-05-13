@@ -31,11 +31,9 @@ export class AdminStudentSubjectComponent {
     successMessage: string = null;
     errorMessage: string = null;
 
-    disableStudyYearButton: boolean = false;
-    disableStudentButton: boolean = false;
-
     displayStudents: boolean = false;
-    currentStep: number = null;
+
+    steps: any = [0, 0, 0, 0, 0];
 
     constructor(private http: HttpClient, private adminService: AdminService, private fb: FormBuilder) {
     }
@@ -113,8 +111,7 @@ export class AdminStudentSubjectComponent {
                 this.studentSubjectForm.get('universityYear').disable();
                 this.studentSubjectForm.get('specialize').disable();
 
-                this.disableStudyYearButton = true;  
-                this.currentStep = 2;
+                this.steps[0] = 1;
             }, error => {
                 console.log(error);
             }
@@ -131,9 +128,9 @@ export class AdminStudentSubjectComponent {
                 this.displayStudents = true;
                 this.studentsArray = [];
                 this.studentsArray = response;
-                this.disableStudentButton = true;
 
-                this.currentStep = 3;
+                this.steps[0] = 0;
+                this.steps[1] = 1;
             },
             error => {
                 console.log(error);
@@ -150,6 +147,9 @@ export class AdminStudentSubjectComponent {
                 this.studentsArray.forEach(element => {
                     element.subjects = [];
                     element.subjects = response;
+                    
+                    this.steps[1] = 0;
+                    this.steps[2] = 1;
                 });
             },
             error => {

@@ -93,19 +93,61 @@
 
         <div class='subjects' *ngIf='studyYearId != null'>
             <div class='study-plan container'>
-                <div *ngIf='currentStep == 2'>
-                    <h4 class='small-title'>Search for students based on the study year id selected</h4>
-                    <p class='small-text'>There are multiple steps untill adding the subjects to the students.</p>
-                    <hr>
-                    <button class='action-button' (click)='getStudents()' [disabled]='disableStudentButton'>Get Students</button>
-                </div>
-                <div *ngIf='currentStep == 3'>
-                    <h4 class='small-title'>Search for mandatory subjects</h4>
-                    <p class='small-text'>Get only the mandatory subjects from study plan.</p>
-                    <hr>
-                    <button class='action-button' (click)='getStudyPlanSubjects()'>Get Study Plan Subjects</button>
-                </div>
+                <h4 class='small-title'>Multi Steps</h4>
+                <p class='small-text'>There are multiple steps untill adding the subjects to the students. Please follow them</p>
+                <hr>
                 
+                <div class='steps-wrapper'>
+                    <div class='step' [class.active]='steps[0] == 1'>
+                        <span class='round'>1</span>
+                        <div class='text'>Get Students</div>
+                    </div>
+    
+                    <div class='step' [class.active]='steps[1] == 1'>
+                        <span class='round'>2</span>
+                        <div class='text'>Get Mandatory Subjects</div>
+                    </div>
+
+                    <div class='step' [class.active]='steps[2] == 1'>
+                        <span class='round'>3</span>
+                        <div class='text'>Get Optional Subjects</div>
+                    </div>
+
+                    <div class='step' [class.active]='steps[3] == 1'>
+                        <span class='round'>4</span>
+                        <div class='text'>Get Unpromoted Subjects</div>
+                    </div>
+
+                    <div class='step' [class.active]='steps[4] == 1'>
+                        <span class='round'>5</span>
+                        <div class='text'>Equate Subjects</div>
+                    </div>
+                </div>                
+                
+                <div class='show-info' [class.active]='steps[0] == 1'>
+                    <p class='small-text'>Get the students assigned to the study plan selected from above.</p>
+                    <button class='action-button' (click)='getStudents()'>Get Students</button>
+                </div>
+                <div class='show-info' [class.active]='steps[1] == 1'>
+                    <p class='small-text'>Get the mandatory subjects from the study plan and assign to students.</p>
+                    <button class='action-button' (click)='getStudyPlanSubjects()'>Get Subjects</button>
+                </div>
+                <div class='show-info' [class.active]='steps[2] == 1'>
+                    <p class='small-text'>Get optionals selected by students.</p>
+                    <p class='small-text'>If some studenents dodn't choose optional subjects, they will be assigned to random subjects.</p>
+                    <button class='action-button' (click)='getOptionalSubjects()'>Get Optionals</button>
+                </div>
+
+                <div class='show-info' [class.active]='steps[3] == 1'>
+                    <p class='small-text'>Get Unpromoted Subjects sor some students from the years that have passed.</p>
+                    <button class='action-button' (click)='getUnpromotedSubjects()'>Get Unpromoted</button>
+                </div>
+
+                <div class='show-info' [class.active]='steps[4] == 1'>
+                    <p class='small-text'>Equate subjects for some students if they are renumbered.</p>
+                    <button class='action-button' (click)='equateSubjects()'>Equate</button>
+                </div>
+
                 <div class='no-results' *ngIf='displayStudents == true && studentsArray.length == 0'>
                    <div class='no-results-text'>No students were added to this Study Year ID</div>
                 </div>
