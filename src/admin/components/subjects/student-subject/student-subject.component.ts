@@ -5,6 +5,7 @@ import { AdminService } from '../../../services/admin.services';
 import { takeWhile } from 'rxjs/operator/takeWhile';
 
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Subject } from 'rxjs/Subject';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class AdminStudentSubjectComponent {
 
     displayStudents: boolean = false;
 
-    steps: any = [0, 0, 0, 0, 0];
+    steps: any = [0, 0, 0, 0, 0, 0, 0];
+    uniqueCategories: any[] = [];
 
     constructor(private http: HttpClient, private adminService: AdminService, private fb: FormBuilder) {
     }
@@ -77,7 +79,6 @@ export class AdminStudentSubjectComponent {
     }
 
     createForm() {
-        
         const studentSubjectFormGroup = {};
         studentSubjectFormGroup['semester'] = []
         studentSubjectFormGroup['studyYear'] = [];
@@ -90,7 +91,6 @@ export class AdminStudentSubjectComponent {
     }
 
     getStudyYearId(): void {
-
         let temp = {
             name: this.studentSubjectForm.value['specialize'],
             studyYear: this.studentSubjectForm.value['studyYear'],
@@ -119,12 +119,10 @@ export class AdminStudentSubjectComponent {
     }
 
     getStudents(): void {
-        
         this.adminService.getStudentsByStudyYearId(this.studyYearId)
         .takeWhile(() => this.alive)
         .subscribe(
             response => {
-                console.log(response);
                 this.displayStudents = true;
                 this.studentsArray = [];
                 this.studentsArray = response;
@@ -143,10 +141,9 @@ export class AdminStudentSubjectComponent {
         .takeWhile(() => this.alive)
         .subscribe(
             response => {
-                console.log(response);
                 this.studentsArray.forEach(element => {
                     element.subjects = [];
-                    element.subjects = response;
+                    element.subjects = response.map(x => Object.assign({}, x));
                     
                     this.steps[1] = 0;
                     this.steps[2] = 1;
@@ -156,5 +153,201 @@ export class AdminStudentSubjectComponent {
                 console.log(error);
             }
         )
+    }
+
+    getOptionalSubjects(): void {
+
+        this.adminService.getOptionalSubjects(this.studyYearId)
+        .takeWhile(() => this.alive)
+        .subscribe(
+            response => {
+
+                if (response.errorCode == 0 && response.statusCode == 1) {
+                    this.successMessage = response.message;
+                }
+
+                if (response.errorCode == 0 && response.statusCode == 0) {
+                    response.optionalSubjects.forEach(optional => {
+                        if (this.uniqueCategories.indexOf(optional.optional_group) === -1) {
+                            this.uniqueCategories.push(optional.optional_group);
+                        }
+                    });
+                   
+                    this.studentsArray.forEach(element => {
+                        let hasOptionals = this.findStudent(response.selectedOptionals, element.id);
+
+                        if (hasOptionals == false) {
+                            this.uniqueCategories.forEach(category => {
+                                let randomSubject = this.findRandomOptional(response.optionalSubjects, category);
+                                element.subjects.push(randomSubject);
+                            })
+                        } else {
+                            
+                            response.selectedOptionals.forEach(selectedOp => {
+                                if (element.id == selectedOp.student_id) {
+
+                                    this.uniqueCategories.forEach(category => {
+                                        if (selectedOp.optional_group == category) {
+                                            let data = {
+                                                id: selectedOp.subject_id,
+                                                name: selectedOp.subject_name,
+                                                optionalGroup: selectedOp.optional_group,
+                                            }
+                                            element.subjects.push(data);
+                                            return;
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                }
+
+                this.steps[2] = 0;
+                this.steps[3] = 1;
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    }
+
+    getUnpromotedSubjects() {
+        this.adminService.getUnpromotedSubjects(this.studyYearId)
+        .takeWhile(() => this.alive)
+        .subscribe(
+            response => {
+                if (response.length == 0) {
+                    this.successMessage = "No unpromoted subjects were found";
+                }
+
+                if (response.length > 0) {
+
+                    this.studentsArray.forEach(element => {
+
+                        response.forEach(unpromoted => {
+                            if (unpromoted.student_id == element.id) {
+                                let temp = {
+                                    id: unpromoted.subject_id,
+                                    name: unpromoted.name
+                                }
+                                element.subjects.push(temp);
+                                return;
+                            }
+                        });
+
+                        this.steps[3] = 0;
+                        this.steps[4] = 1;
+                    })
+                }
+
+            },
+            error => {
+
+            }
+        )
+    }
+
+    equateSubjects() {
+
+        let temp = {
+            name: this.studentSubjectForm.value['specialize'],
+            studyYear: this.studentSubjectForm.value['studyYear'],
+            rank: this.studentSubjectForm.value['rank'],
+            universityYear: this.studentSubjectForm.value['universityYear'],
+            semester: this.studentSubjectForm.value['semester']
+        };
+
+        let uv = temp.universityYear.split(' - ');
+        temp.universityYear = (parseInt(uv[0]) - 1) + ' - ' + (parseInt(uv[1]) - 1);
+        
+        this.adminService.getStudyYearId(temp)
+        .takeWhile(() => this.alive)
+        .subscribe(
+            response => {
+                if (response.length == 0) {
+                    if (response.length == 0) {
+                        this.successMessage = "No subjects to equate";
+                    }
+                } else {
+
+                    this.adminService.equateSubjects(response[0].ID)
+                    .takeWhile(() => this.alive)
+                    .subscribe(
+                        response => {
+                            if (response.length == 0) {
+                                this.successMessage = "No subjects to equate";
+                            }
+            
+                            if (response.length > 0) {
+                                this.studentsArray.forEach(element => {
+                                    response.forEach(equate => {
+                                        if (element.id == equate.student_id) {
+                                            element.subjects.forEach(subject => {
+                                                if (subject.id == equate.subject_id) {
+                                                    subject.grade = equate.final_grade;
+                                                }
+                                            });
+                                        }
+                                    })
+                                })
+                            }
+                        },
+                        error => {
+
+                        }
+                    )   
+                }      
+                
+                this.steps[4] = 0;
+                this.steps[5] = 1;
+
+            }, error => {
+                console.log(error);
+            }
+        )
+    }
+
+    addSubjects() {
+        this.adminService.addStudentsSubjects(this.studentsArray, this.studyYearId)
+        .takeWhile(() => this.alive)
+        .subscribe(
+            response => {
+                console.log(response);
+                if (response.errorCode == 0) {
+                    this.steps[5] = 0;
+                    this.steps[6] = 1;
+                }
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    }
+
+    findStudent(array, id) {
+        return array.some(element => {
+            if (element.student_id == id) {
+                return element;
+            }
+        });
+    };
+
+    findRandomOptional(array, category) {
+        let temp = [];
+        array.forEach(element => {
+            if (element.optional_group == category) {
+                let data = {
+                    id: element.id,
+                    name: element.name,
+                    optionalGroup: element.optional_group
+                }
+
+                temp.push(data);
+            }
+        });
+
+        var rand = Math.floor((Math.random() * temp.length));
+        return temp[rand];
     }
 }

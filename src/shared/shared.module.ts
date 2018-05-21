@@ -12,6 +12,8 @@ import { SpecializeFormatPipe }     from './pipes/format.specialize.pipe';
 import { RankFormatPipe }           from './pipes/format.rank.pipe';
 import { SemesterFormatPipe }       from './pipes/format.semester.pipe';
 import { StudyYearFormatPipe }      from './pipes/format.study-year.pipe';
+import { StudentNameFilterPipe } from './pipes/filter.student-name.pipe';
+import { StudentGroupFilterPipe } from './pipes/filter.groups.pipe';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { StudyYearFormatPipe }      from './pipes/format.study-year.pipe';
       SpecializeFormatPipe,
       RankFormatPipe,
       SemesterFormatPipe,
-      StudyYearFormatPipe
+      StudyYearFormatPipe,
+      StudentNameFilterPipe,
+      StudentGroupFilterPipe
   ],
   imports: [
       BrowserModule,
@@ -34,7 +38,9 @@ import { StudyYearFormatPipe }      from './pipes/format.study-year.pipe';
       SpecializeFormatPipe,
       RankFormatPipe,
       SemesterFormatPipe,
-      StudyYearFormatPipe
+      StudyYearFormatPipe,
+      StudentNameFilterPipe,
+      StudentGroupFilterPipe
   ],
   bootstrap: []
 })

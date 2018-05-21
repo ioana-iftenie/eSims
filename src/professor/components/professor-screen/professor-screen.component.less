@@ -1,0 +1,139 @@
+@import '../../../assets/less/variables.less';
+
+.professor-main-wrapper {
+    .header-wrapper {
+        background: @darkBlue;
+        padding: 15px;
+        color: @white;
+        margin: 0;
+
+        .logo-wrapper {
+            text-align: right;
+
+            #logo {
+                height: 90px;    
+            }
+        }
+
+        .navigation-wrapper {
+            position: relative;
+
+            .navigation-elements {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+
+                .nav {
+                    display: inline-block;
+                    height: 50px;
+                    line-height: 50px;
+                    padding: 0 35px;
+                    margin-right: 20px;
+                    border: 1px solid @white;
+                    cursor: pointer;
+
+                    &:hover {
+                        color: @mustard;
+                        border: 1px solid @mustard;
+                    }
+                }
+            }
+        }
+
+        .navigation-right {
+            text-align: right;
+
+            .info-wapper {
+                .info {
+                    position: relative;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    display: inline;
+
+                    i {
+                        font-size: 25px;
+                        margin-left: 15px;
+                    }
+                }
+
+                .logo-wrapper {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .small-banner {
+        height: 5px;
+        background: @mustard;
+        margin-bottom: 20px;
+    }
+
+    .professor-page-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        border: 1px solid @mediumGray;
+        background: @white;
+        padding: 15px;
+
+        .page-title {
+            font-size: 20stpx;
+            font-weight: bold;
+        }
+
+        .students-wrapper {
+            .option {
+                label {
+                    font-weight: initial;
+                    font-size: 18px;
+                    margin-bottom: .5rem;
+                }
+            }
+        }
+
+        .filters-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .students-table {
+            tbody tr {
+                font-size: 14px;
+            }
+
+            button {
+                margin-top: 0;
+            }
+        }
+
+        .grades-wrapper {
+            .grade.is-new {
+                color: @darkGreen;
+            }
+        }
+
+    }
+
+}
+
+#addMarkModal {
+    position: fixed;
+    padding: 20px;
+    width: 50%;
+    left: 25%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: @white;
+    border: 1px solid @mediumGray;
+    z-index: 9;
+    box-shadow: 25px 25px 50px #888888;
+
+    .modal-header {
+        margin-bottom: 10px;
+        
+        .title {
+            font-size: 16px;
+            font-style: italic;
+            text-align: center;
+        }
+    }
+}

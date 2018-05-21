@@ -1,1 +1,214 @@
-<h1> This is professor screen</h1>
+<section class='professor-main-wrapper'>
+    <div class='header-wrapper row'>
+        
+        <div class='navigation-wrapper col-md-6 col-sm-9 col-xs-12'>
+            <div class='navigation-elements'>
+                <span class='nav'><a routerLink='/home'>Home</a></span>
+                <span class='nav'><a routerLink='/professor/view-student'>View Student</a></span>
+                <span class='nav'><a routerLink='/professor/add-grade'>Add Grades</a></span>
+            </div>
+        </div>
+        <div class='col-md-6 col-sm-9 col-xs-12 navigation-right'> 
+            <div class='info-wapper'>
+                <div class='info'>
+                    <span class='name'>Radulescu Vlad</span>
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </div>
+                <div class='logo-wrapper'>
+                    <img  id='logo' src='assets/images/UAIC_logo4.png' alt='logo'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='small-banner'></div>
+
+    <div class='professor-page-content'>
+        <h3 class='page-title'>Add grades</h3>
+
+        <form [formGroup]='studyPlanForm'>
+            <div class='dropdowns-wrapper row'>
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Semester</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='semester'>
+                            <option *ngFor='let option of semestersArray' value='{{ option }}'>{{ option | semesterFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Study Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='studyYear'>
+                            <option *ngFor='let option of studyYearsArray' value='{{ option }}'>{{ option | studyYearFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Degree</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='rank'>
+                            <option *ngFor='let option of ranksArray' value='{{ option }}'>{{ option | rankFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>University Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='universityYear'>
+                            <option *ngFor='let option of universityYearsArray' value='{{ option }}'>{{ option }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Specialize</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='specialize'>
+                            <option *ngFor='let option of specializesArray' value='{{ option }}'>{{ option | specializeFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label></label>
+                    <div class='option-wrapper with-button'>
+                        <button class='action-button' (click)='getStudyYear()'>Get Study Year</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <hr>
+
+        <div class='row'>
+            <div class='option col-md-6 col-sm-6 col-xs-12' *ngIf='displaySubjectsDr == true'>
+                <label>Select Subject</label>
+                <div class='option-wrapper'>
+                    <select [(ngModel)]='subjectModel' (change)='getStudents()'>
+                        <option value='none'>Select ...</option>
+                        <option *ngFor='let option of subjectsArray' value='{{ option.subjectId }}'>{{ option.name }}</option>
+                    </select>
+                    <span class='sufix small'>
+                        <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class='students-wrapper' *ngIf='displayStudents == true'>
+            <div class='row filters-wrapper'>
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Filter by Group</label>
+                    <div class='option-wrapper'>
+                        <select [(ngModel)]='groupModel'>
+                            <option value='0'>Select...</option>
+                            <option *ngFor='let option of groups' value='{{ option }}'>{{ option }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='col-md-8'>
+                    <label class=''>Search by student name</label>
+                    <div class='input-wrapper'>
+                        <input type='text' [(ngModel)]='studentSearch' placeholder='Search by name...'>
+                        <span class='sufix'>
+                            <i class='fa fa-search'></i>
+                        </span>                    
+                    </div>
+                </div>
+            </div>
+
+            <div class='students-table'>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Student Number</th>
+                            <th>Name</th>
+                            <th>Group</th>
+                            <th>Grades</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let student of studentsArray | studentNameSearch : studentSearch | studentGroupSearch : groupModel; let i = index'>
+                            <td>{{ student.id }}</td>
+                            <td>{{ student.studentNumber }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.groupName }}</td>
+                            <td>
+                                <div class='grades-wrapper'>
+                                    <div class='grades' *ngIf='student.grades == undefined'>No grades registered</div>
+                                    <div class='grades' *ngIf='student.grades != undefined'>
+                                        <div class='grade' *ngFor='let grade of student.grades' [class.is-new]='grade.isNew'>
+                                            <span>{{ grade.markTypeName }} </span>
+                                            <span> - {{ grade.grade }}</span>
+                                            <span *ngIf='grade.isNew != undefined'> -  ** NEW **</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><button class='action-button' (click)='addMark(i)'>Add Mark</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</section>
+
+<section id='addMarkModal' *ngIf='showModal == true'>
+    <div class='modal-header'>
+        <p class='title'>Add Mark for {{ modalStudent.name }}</p>
+    </div>
+
+    <div class='modal-body row'>
+        <div class='option col-md-6 col-sm-6 col-xs-12'>
+            <label>Grade Type</label>
+            <div class='option-wrapper'>
+                <select [(ngModel)]='markType'>
+                    <option *ngFor='let option of markTypesArray' value='{{ option.id }}'>{{ option.name }}</option>
+                </select>
+                <span class='sufix small'>
+                    <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                </span>
+            </div>
+        </div>
+        <div class='option col-md-6 col-sm-6 col-xs-12'>
+            <label>Grade</label>
+            <div class='input-wrapper'>
+                <input type='text' [(ngModel)]='gradeModel' placeholder='Grade...'>
+                <span class='sufix'>
+                    <i class='fa fa-sort-numeric-desc'></i>
+                </span>                    
+            </div>
+        </div>
+    </div>
+
+    <div class='modal-footer'>
+        <button type='button' class='button action-button' (click)='addGrades()'>Add Grades</button>
+        <button type='button' class='button danger-button' (click)='closeModal()'>Close</button>
+    </div>
+</section>
+      

@@ -122,46 +122,60 @@
                         <span class='round'>5</span>
                         <div class='text'>Equate Subjects</div>
                     </div>
+
+                    <div class='step' [class.active]='steps[5] == 1'>
+                        <span class='round'>6</span>
+                        <div class='text'>Add Subjects</div>
+                    </div>
+                    <hr>
                 </div>                
                 
-                <div class='show-info' [class.active]='steps[0] == 1'>
-                    <p class='small-text'>Get the students assigned to the study plan selected from above.</p>
-                    <button class='action-button' (click)='getStudents()'>Get Students</button>
-                </div>
-                <div class='show-info' [class.active]='steps[1] == 1'>
-                    <p class='small-text'>Get the mandatory subjects from the study plan and assign to students.</p>
-                    <button class='action-button' (click)='getStudyPlanSubjects()'>Get Subjects</button>
-                </div>
-                <div class='show-info' [class.active]='steps[2] == 1'>
-                    <p class='small-text'>Get optionals selected by students.</p>
-                    <p class='small-text'>If some studenents dodn't choose optional subjects, they will be assigned to random subjects.</p>
-                    <button class='action-button' (click)='getOptionalSubjects()'>Get Optionals</button>
-                </div>
+                <div *ngIf='steps[6] != 1'>
+                    <div class='show-info' [class.active]='steps[0] == 1'>
+                        <p class='small-text'>Get the students assigned to the study plan selected from above.</p>
+                        <button class='action-button' (click)='getStudents()'>Get Students</button>
+                    </div>
+                    <div class='show-info' [class.active]='steps[1] == 1'>
+                        <p class='small-text'>Get the mandatory subjects from the study plan and assign to students.</p>
+                        <button class='action-button' (click)='getStudyPlanSubjects()'>Get Subjects</button>
+                    </div>
+                    <div class='show-info' [class.active]='steps[2] == 1'>
+                        <p class='small-text'>Get optionals selected by students.</p>
+                        <p class='small-text'>If some studenents dodn't choose optional subjects, they will be assigned to random subjects.</p>
+                        <button class='action-button' (click)='getOptionalSubjects()'>Get Optionals</button>
+                    </div>
 
-                <div class='show-info' [class.active]='steps[3] == 1'>
-                    <p class='small-text'>Get Unpromoted Subjects sor some students from the years that have passed.</p>
-                    <button class='action-button' (click)='getUnpromotedSubjects()'>Get Unpromoted</button>
-                </div>
+                    <div class='show-info' [class.active]='steps[3] == 1'>
+                        <p class='small-text'>Get Unpromoted Subjects sor some students from the years that have passed.</p>
+                        <button class='action-button' (click)='getUnpromotedSubjects()'>Get Unpromoted</button>
+                    </div>
 
-                <div class='show-info' [class.active]='steps[4] == 1'>
-                    <p class='small-text'>Equate subjects for some students if they are renumbered.</p>
-                    <button class='action-button' (click)='equateSubjects()'>Equate</button>
-                </div>
+                    <div class='show-info' [class.active]='steps[4] == 1'>
+                        <p class='small-text'>Equate subjects for some students if they are renumbered.</p>
+                        <button class='action-button' (click)='equateSubjects()'>Equate</button>
+                    </div>
 
-                <div class='no-results' *ngIf='displayStudents == true && studentsArray.length == 0'>
-                   <div class='no-results-text'>No students were added to this Study Year ID</div>
-                </div>
+                    <div class='show-info' [class.active]='steps[5] == 1'>
+                        <button class='action-button' (click)='addSubjects()'>Add Subjects</button>
+                    </div>
 
-                <div class='students-wrapper'>
-                    <div class='student' *ngFor='let student of studentsArray'>
-                        <span>{{ student.id }} - </span>
-                        <span>{{ student.studentNumber }} - </span>
-                        <span>{{ student.name }}</span>
+                    <div class='no-results' *ngIf='displayStudents == true && studentsArray.length == 0'>
+                    <div class='no-results-text'>No students were added to this Study Year ID</div>
+                    </div>
 
-                        <div class='subjects-wrapper' *ngIf='student.subjects != undefined'>
-                            <div class='subject' *ngFor='let subject of student.subjects'>
-                                <span>{{ subject.id }}</span>
-                                <span>{{ subject.name }}</span>
+                    <div class='students-wrapper'>
+                        <div class='student' *ngFor='let student of studentsArray'>
+                            <span>{{ student.id }} - </span>
+                            <span>{{ student.studentNumber }} - </span>
+                            <span>{{ student.name }}</span>
+
+                            <div class='subjects-wrapper' *ngIf='student.subjects != undefined'>
+                                <div class='subject' *ngFor='let subject of student.subjects'>
+                                    <span>{{ subject.id }}</span>
+                                    <span>{{ subject.name }}</span>
+                                    <span *ngIf='subject.optionalGroup' class='banner banner-mustard'> Group - {{ subject.optionalGroup }}</span>
+                                    <span *ngIf='subject.grade' class='banner banner-green'> Grade - {{ subject.grade }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>

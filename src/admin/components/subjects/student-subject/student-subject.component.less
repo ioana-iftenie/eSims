@@ -11,14 +11,6 @@
 
 .study-plan-wrapper {
 
-    .option {
-        .with-button {
-            button {
-                margin-top: 0;
-            }
-        }
-    }
-
     .study-plan {
         padding: 20px;
         background: @white;
@@ -87,9 +79,31 @@
             color: @lightBlue;
             margin-bottom: 15px;
 
-            .subjects {
+            .subjects-wrapper {
+                color: @fontColorGray;
+                
+            }
+
+            .subject {
+                padding-left: 10%;
+                margin-bottom: 10px;
+
                 .mandatory {
                     color: @darkBlue;
+                }
+
+                .banner {
+                    font-size: 14px;
+                    color: white;
+                    padding: 5px 15px;
+                }
+                
+                .banner-green {
+                    background: @darkGreen;
+                }
+                
+                .banner-mustard {
+                    background: @mustard;
                 }
             }
         }

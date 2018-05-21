@@ -125,4 +125,36 @@ export class AdminService {
         return this.http.get(url, {})
         .catch(this.errorHandler.handleError)
     }
+
+    getOptionalSubjects(studyYearId: any): Observable<any> {
+        let url = '/admins/subjects/get-optional-subjects/' + studyYearId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError);
+    }
+
+    getUnpromotedSubjects(studyYearId: any): Observable<any> {
+        let url = '/admins/subjects/get-unpromoted-subjects/' + studyYearId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError);
+    }
+
+    equateSubjects(studyYearId: any): Observable<any> {
+        let url = '/admins/subjects/equate-subjects/' + studyYearId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError);
+    }
+
+    addStudentsSubjects(studentSubjects: any[], studyYearId: any): Observable<any> {
+        let url = '/admins/subjects/add-student-subjects';
+
+        let data = {
+            data: studentSubjects,
+            studyYearId: studyYearId
+        }
+        return this.http.post(url, data)
+        .catch(this.errorHandler.handleError);
+    }
 }

@@ -55,6 +55,16 @@ html body {
                 background: @mediumGray;
             }
         }
+
+        &.danger-button {
+            color: @white;
+            background: @lightError;
+            border: none;
+            
+            &:hover {
+                background: @darkError;
+            }
+        }
     }
 
     .error-wrapper {
@@ -367,6 +377,12 @@ select::-ms-expand {
 
         .datepicker-wrapper {
             display: flex;
+        }
+    }
+
+    .with-button {
+        button {
+            margin-top: 0;
         }
     }
 }
