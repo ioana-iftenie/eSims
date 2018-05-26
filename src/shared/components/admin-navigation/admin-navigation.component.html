@@ -1,10 +1,8 @@
 <section class='admin-navigation-wrapper' [class.hide-navigation]='hideNavigation'>
-    <span class='hide-navigation fa fa-angle-left' *ngIf='hideNavigation == false' (click)='hideNavigation = !hideNavigation'></span>
-    <span class='show-navigation fa fa-angle-right' *ngIf='hideNavigation == true' (click)='hideNavigation = !hideNavigation'></span>
 
     <div class='admin-info'>
         <div class='img-holder'>
-            <a routerLink='/home'>
+            <a href='/home'>
                 <i class="fa fa-user-circle-o admin" aria-hidden="true"></i>
             </a>
             <div class='info margin-t-15'>
@@ -15,6 +13,10 @@
             <span class='info important'>
                 Admin
             </span>
+
+            <div class='logout' (click)='logout()'>
+                Logout
+            </div>
         </div>
     </div>
 

@@ -157,4 +157,21 @@ export class AdminService {
         return this.http.post(url, data)
         .catch(this.errorHandler.handleError);
     }
+
+    getFianalStudentGrades(studyYearId: any): Observable<any> {
+        let url = '/admins/students/get-pre-final-grades/' + studyYearId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError);
+    }
+
+    addFinalStudentGrades(finalGradesArray): Observable<any> {
+        let url = '/admins/students/add-final-grades';
+        let data = {
+            finalGrades: finalGradesArray
+        }
+
+        return this.http.post(url, data)
+        .catch(this.errorHandler.handleError);
+    }
 }

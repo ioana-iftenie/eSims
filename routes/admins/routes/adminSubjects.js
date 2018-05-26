@@ -50,12 +50,8 @@ router.post('/create', function(req, res, next) {
 });
 
 router.get('/search/:searchString/:allActive', function(req, res) {
+    let query = 'SELECT * FROM SUBJECT WHERE NAME LIKE ?';
 
-    if (req.params.allActive == true) {
-        let query = 'SELECT * FROM SUBJECT WHERE NAME LIKE ? WHERE STATUS_IND = 1'
-    } else {
-        let query = 'SELECT * FROM SUBJECT WHERE NAME LIKE ?';
-    }
     connection.query(query, '%' + req.params.searchString + '%', function(err, response) {
         if (err) throw err;
 
@@ -69,13 +65,17 @@ router.get('/search/:searchString/:allActive', function(req, res) {
                         name: subject.name + ' (' + active + ') ',
                         value: subject.id
                     };
+
+                    toSend.push(temp);
                 } else {
-                    let temp = {
-                        name: subject.name,
-                        value: subject.id
-                    };
+                    if (subject.status_ind == 1) {
+                        let temp = {
+                            name: subject.name,
+                            value: subject.id
+                        };
+                        toSend.push(temp);
+                    }
                 }
-                toSend.push(temp);
             });
 
             resolve(toSend);
@@ -257,7 +257,11 @@ router.get('/equate-subjects/:studyYearId', function(req, res) {
 router.post('/add-student-subjects', function(req, res) {
 
     promiseCreateArray = new Promise(function(resolve, reject) {
-        let toSend = [];
+        let toSend =  {
+            subjects: [],
+            subjectGrades: []
+        }
+
 
         req.body.data.forEach(student => {
             student.subjects.forEach(subject => {
@@ -267,7 +271,18 @@ router.post('/add-student-subjects', function(req, res) {
                 temp.push(subject.id);
                 temp.push(subject.grade != undefined ? subject.garde : null);
                 
-                toSend.push(temp);
+                toSend.subjects.push(temp);
+
+                if (subject.grade != undefined) {
+                    let data = [];
+                    data.push(student.id);
+                    data.push(req.body.studyYearId);
+                    data.push(subject.id);
+                    data.push(grade);
+                    data.push(5);
+
+                    toSend.subjectGrades.push(data);
+                }
             })
         })
         resolve(toSend);
@@ -278,15 +293,30 @@ router.post('/add-student-subjects', function(req, res) {
 
         // let query = 'INSERT INTO STUDENT_SUBJECT SET ?';
         let query = 'INSERT INTO STUDENT_SUBJECT (STUDENT_ID, STUDY_YEAR_ID, SUBJECT_ID, FINAL_GRADE) VALUES ?';
+
+        let queryStudentGrades = 'INSERT INTO STUDENT_GRADE (STUDENT_ID, STUDY_YEAR_ID, SUBJECT_ID, GRADE, GRADE_TYPE) VALUES ?';
         console.log(response);
-        var sql = connection.query(query, [response], function(err, result) {
+        var sql = connection.query(query, [response.subjects], function(err, result) {
             if (err) throw err;
 
-            let temp = {
-                errorCode: 0,
-                message: 'Student Subjects were added successfuly'
+            if (response.subjectGrades.length > 0) {
+                var sql = connection.query(queryStudentGrades, [response.subjectGrades], function(err, result) {
+                    if (err) throw err;    
+                    
+                    let temp = {
+                        errorCode: 0,
+                        message: 'Student Subjects were added successfuly'
+                    }
+                    res.send(temp);
+                })
+
+            } else {
+                let temp = {
+                    errorCode: 0,
+                    message: 'Student Subjects were added successfuly'
+                }
+                res.send(temp);
             }
-            res.send(temp);
         })
         console.log(sql.sql);        
     })

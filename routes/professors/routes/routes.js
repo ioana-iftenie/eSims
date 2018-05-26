@@ -44,4 +44,14 @@ router.post('/add-grade', function(req, res) {
         res.send(temp);
     })
 })
+
+router.get('/get-professor-info/:professorId', function(req, res) {
+    let query = "SELECT CONCAT(FIRST_NAME, ' ', LAST_NAME) AS professorName FROM PROFESSOR WHERE ID = ?";
+
+    connection.query(query, [req.params.professorId], function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
+    })
+})
 module.exports = router;

@@ -49,5 +49,6 @@ export class TokenInteractionService {
     
     clear(): void {
         localStorage.clear();
+        this.router.navigate(['login']);
     }
 }

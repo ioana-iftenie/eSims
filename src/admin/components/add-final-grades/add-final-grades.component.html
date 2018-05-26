@@ -1,0 +1,131 @@
+<admin-navigation [userInfo]='userInfo'></admin-navigation>
+<section class='admin-title-page-wrapper'>
+    <div class='title-wrapper'>
+        <h2 class='page-title'>Students Final Grades</h2>
+    </div>
+</section>
+
+<section class='study-plan-wrapper main-wrapper-admin'>
+    <div class='study-plan container'>
+        <form [formGroup]='studyPlanForm'>
+            <h4 class='small-title'>Select Study Plan</h4>
+            <p class='small-text'>Please select from the following dropdowns in order to select the correct study year</p>
+            <p class='small-text'>Note that your action will NOT modify the database.</p>
+            <hr>
+
+            <div class='dropdowns-wrapper row'>
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Semester</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='semester'>
+                            <option *ngFor='let option of semestersArray' value='{{ option }}'>{{ option | semesterFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Study Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='studyYear'>
+                            <option *ngFor='let option of studyYearsArray' value='{{ option }}'>{{ option | studyYearFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Degree</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='rank'>
+                            <option *ngFor='let option of ranksArray' value='{{ option }}'>{{ option | rankFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>University Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='universityYear'>
+                            <option *ngFor='let option of universityYearsArray' value='{{ option }}'>{{ option }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Specialize</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='specialize'>
+                            <option *ngFor='let option of specializesArray' value='{{ option }}'>{{ option | specializeFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label></label>
+                    <div class='option-wrapper with-button'>
+                        <button class='action-button' (click)='getStudentsAndGrades()'>Get students and grades</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <a *ngIf='studyYearId != null' class='link' (click)="viewStudentsGrades()">View Student Grades</a>
+
+        <div *ngIf='successMessage != null' class='success-wrapper'>
+            <div class='success-message'> {{ successMessage }} </div>
+        </div>
+    
+        <div *ngIf='errorMessage != null' class='error-wrapper'>
+            <div class='error-message'> {{ errorMessage }} </div>
+        </div>
+        
+        <div class='students-table' *ngIf='showStudentsTable == true'>
+            <button *ngIf='viewOnly == false' class='action-button'(click)='addFinalGrades()'>Add Grades</button>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Student Number</th>
+                        <th>Name</th>
+                        <th>Subjects & Grades</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let student of studentGradesArray'>
+                        <td>{{ student.studentId }}</td>
+                        <td>{{ student.studentNumber }}</td>
+                        <td>{{ student.studentName }}</td>
+                        <td>
+                            <div class='subjects-wrapper'>
+                                <div class='subjects' *ngIf='student.subjects != undefined'>
+                                    <div class='subject' *ngFor='let subject of student.subjects' [class.failed]='!subject.finalGrade || subject.finalGrade <= 4' [class.passed]='subject.finalGrade >= 5'>
+                                        <i *ngIf='!subject.finalGrade || subject.finalGrade <= 4' class="fa fa-times failed" aria-hidden="true"></i>
+                                        <i *ngIf='subject.finalGrade >= 5' class="fa fa-check passed" aria-hidden="true"></i>
+                                        <span>{{ subject.subjectName }} </span>
+                                        <span *ngIf='subject.finalGrade'> - {{ subject.finalGrade }}</span>
+                                        <span *ngIf='!subject.finalGrade && viewOnly == false'> - 4</span>
+                                        <span *ngIf='!subject.finalGrade && viewOnly == true'> - Not Yet Added</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

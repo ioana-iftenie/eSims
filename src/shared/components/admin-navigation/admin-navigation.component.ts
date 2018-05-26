@@ -56,4 +56,8 @@ export class AdminNavigationComponent {
             }
         );
     }
+    
+    logout(): void {
+		this.token.clear();
+    }
 }

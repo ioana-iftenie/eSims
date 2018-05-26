@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const multer  = require('multer');
 const fs = require('fs');
 const XLSX = require('xlsx')
+var mysql = require('mysql');
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -202,4 +204,64 @@ router.post('/import-students', function(req, res, next) {
     })
 })
 
+router.get('/get-pre-final-grades/:studyYearId', function(req, res) {
+    let queryGetStudents = `SELECT SI.ID AS originalId, S.ID AS studentId, S.STUDENT_NUMBER AS studentNumber, CONCAT(S.FIRST_NAME, ' ', S.LAST_NAME) AS studentName 
+    , SI.IS_REINMATRICULAT AS isReinmatriculat, SI.IS_RESTANT AS isRestant FROM STUDENT_INFO SI 
+    INNER JOIN STUDENT S ON SI.STUDENT_ID = S.ID WHERE SI.STUDY_YEAR_ID = ?`;
+    let queryGetSubjects = `SELECT SS.ID AS originalId, SI.STUDENT_ID AS studentId, SS.SUBJECT_ID AS subjectId, SJ.NAME AS subjectName
+    FROM STUDENT_INFO SI INNER JOIN STUDENT_SUBJECT SS ON SI.STUDENT_ID = SS.STUDENT_ID
+    INNER JOIN SUBJECT SJ ON SS.SUBJECT_ID = SJ.ID WHERE SI.STUDY_YEAR_ID = ? ORDER BY SI.STUDENT_ID`;
+    let queryGetGrades = `SELECT S.ID AS studentId, SJ.ID AS subjectId, SG.GRADE AS finalGrade
+    FROM STUDENT_GRADES SG INNER JOIN STUDENT S ON SG.STUDENT_ID = S.ID INNER JOIN SUBJECT SJ ON SG.SUBJECT_ID = SJ.ID WHERE 
+    SG.STUDY_YEAR_ID = ? AND SG.GRADE_TYPE = (SELECT ID FROM MARK_TYPE WHERE NAME LIKE "%FINAL GRADE%")`;
+
+    let toSend = {
+        students: [],
+        subjects: [],
+        grades: []
+    }
+
+    connection.query(queryGetStudents, [req.params.studyYearId], function(err, result) {
+        if (err) throw err;
+
+        toSend.students = result;
+
+        connection.query(queryGetSubjects, [req.params.studyYearId], function(err, result) {
+
+            if (err) throw err;
+            toSend.subjects = result;
+
+            connection.query(queryGetGrades, [req.params.studyYearId], function(err, result) {
+                if (err) throw err;
+
+                toSend.grades = result;
+
+                res.send(toSend);
+            })
+        })
+    })
+})
+
+router.post('/add-final-grades', function(req, res) {
+    promiseQuery = new Promise(function(resolve, reject) {
+
+        let queries = '';
+
+        req.body.finalGrades.forEach(function (item) {
+            queries += mysql.format("UPDATE student_subject SET final_grade = ? WHERE id = ?; ", item);
+        });
+    
+        resolve(queries);
+        reject("Something went wrong.");
+    })
+
+    promiseQuery.then(function(response) {
+
+        connection.query(response, function(err, result) {
+            if (err) throw err;
+
+            res.send(result);
+        });  
+    })  
+})
 module.exports = router;

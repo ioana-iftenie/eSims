@@ -3,15 +3,13 @@
         
         <div class='navigation-wrapper col-md-6 col-sm-9 col-xs-12'>
             <div class='navigation-elements'>
-                <span class='nav'><a routerLink='/home'>Home</a></span>
-                <span class='nav'><a routerLink='/professor/view-student'>View Student</a></span>
-                <span class='nav'><a routerLink='/professor/add-grade'>Add Grades</a></span>
+                <span class='nav'><a (click)='logout()'>Logout</a></span>
             </div>
         </div>
         <div class='col-md-6 col-sm-9 col-xs-12 navigation-right'> 
             <div class='info-wapper'>
                 <div class='info'>
-                    <span class='name'>Radulescu Vlad</span>
+                    <span class='name'>{{ professorName }}</span>
                     <i class="fa fa-user" aria-hidden="true"></i>
                 </div>
                 <div class='logo-wrapper'>
@@ -168,7 +166,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td><button class='action-button' (click)='addMark(i)'>Add Mark</button></td>
+                            <td><button class='action-button' (click)='addMark(student.id)'>Add Mark</button></td>
                         </tr>
                     </tbody>
                 </table>

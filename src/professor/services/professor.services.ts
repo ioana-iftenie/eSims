@@ -37,4 +37,11 @@ export class ProfessorService {
         .catch(this.errorHandler.handleError);
     }
 
+    getProfInfo(professorId): Observable<any> {
+        let url = '/professors/get-professor-info/' + professorId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError);
+    }
+
 }

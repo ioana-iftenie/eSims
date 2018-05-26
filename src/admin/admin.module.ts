@@ -27,6 +27,8 @@ import { ViewStudentCardComponent } from './components/cards/view-student/view-s
 import { ViewStudentComponent } from './components/view-student/view-student.component';
 import { AdminStudentSubjectCardComponent } from './components/cards/subjects/student-subject/student-subject.component';
 import { AdminStudentSubjectComponent } from './components/subjects/student-subject/student-subject.component';
+import { AddFinalGradesCardCardComponent } from './components/cards/add-final-grades/add-final-grades-card.component';
+import { AddFinalGradesComponent } from './components/add-final-grades/add-final-grades.component';
 
 
 @NgModule({
@@ -42,12 +44,14 @@ import { AdminStudentSubjectComponent } from './components/subjects/student-subj
     StudyPlanCardComponent,
     ViewStudyPlanCardComponent,
     AdminStudentSubjectCardComponent,
+    AddFinalGradesCardCardComponent,
     CreateUpdateSubjectComponent,
     ViewAllSubjectsComponent,
     StudyPlanComponent,
     ViewStudyPlanComponent,
     ViewStudentComponent,
-    AdminStudentSubjectComponent
+    AdminStudentSubjectComponent,
+    AddFinalGradesComponent
   ],
   imports: [
     BrowserModule,
@@ -73,12 +77,14 @@ import { AdminStudentSubjectComponent } from './components/subjects/student-subj
     StudyPlanCardComponent,
     ViewStudyPlanCardComponent,
     AdminStudentSubjectCardComponent,
+    AddFinalGradesCardCardComponent,
     CreateUpdateSubjectComponent,
     ViewAllSubjectsComponent,
     StudyPlanComponent,
     ViewStudyPlanComponent,
     ViewStudentComponent,
-    AdminStudentSubjectComponent
+    AdminStudentSubjectComponent,
+    AddFinalGradesComponent
   ],
   bootstrap: []
 })

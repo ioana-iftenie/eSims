@@ -5,6 +5,7 @@ import { User } from '../../../core/models/user.class';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AdminService } from '../../../admin/services/admin.services';
 import { ProfessorService } from '../../services/professor.services';
+import { TokenInteractionService } from '../../../core/services/token-interaction.service';
 
 @Component({
     selector: 'professor',
@@ -14,9 +15,6 @@ import { ProfessorService } from '../../services/professor.services';
 })
 
 export class ProfessorScreenComponent {
-
-    @Input()
-    userInfo: User;
 
     studyPlanForm: FormGroup;
     alive: boolean;
@@ -42,8 +40,10 @@ export class ProfessorScreenComponent {
     markType: any;
     gradeModel: any;
 
+    professorName: string;
+
     constructor(private http: HttpClient, private fb: FormBuilder, private adminService: AdminService, 
-                private professorService: ProfessorService) {
+                private professorService: ProfessorService, private token: TokenInteractionService) {
     }
 
     ngOnInit() {
@@ -54,6 +54,17 @@ export class ProfessorScreenComponent {
         this.universityYearsArray = [];
         this.specializesArray = [];
         this.createForm();
+
+        this.professorService.getProfInfo(localStorage.getItem('user_id'))
+        .takeWhile(() => this.alive)
+        .subscribe(
+            response => {
+                this.professorName = response[0].professorName;
+            },
+            error => {
+
+            }
+        )
 
         this.adminService.getStudyYears()
         .takeWhile(() => this.alive)
@@ -194,7 +205,13 @@ export class ProfessorScreenComponent {
 
     addMark(index) {
         this.showModal = true;
-        this.modalStudent = this.studentsArray[index];
+        let i = 0;
+        for (i = 0; i<this.studentsArray.length; i++) {
+            if (this.studentsArray[i].id == index) {
+                this.modalStudent = this.studentsArray[i];
+                break;
+            }
+        }
 
         if (this.markTypesArray.length == 0) {
             this.professorService.getMarkTypes()
@@ -261,5 +278,9 @@ export class ProfessorScreenComponent {
     closeModal() {
         this.showModal = false;
         this.modalStudent = null;
+    }
+
+    logout(): void {
+		this.token.clear();
     }
 }
