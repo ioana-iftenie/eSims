@@ -213,44 +213,10 @@ export class AdminStudentSubjectComponent {
     }
 
     getUnpromotedSubjects() {
-        this.adminService.getUnpromotedSubjects(this.studyYearId)
-        .takeWhile(() => this.alive)
-        .subscribe(
-            response => {
-                if (response.length == 0) {
-                    this.successMessage = "No unpromoted subjects were found";
-                }
+        let studyYearReinmatriculat = '0';
+        let studyYearLastYear = '0';
 
-                if (response.length > 0) {
-
-                    this.studentsArray.forEach(element => {
-
-                        response.forEach(unpromoted => {
-                            if (unpromoted.student_id == element.id) {
-                                let temp = {
-                                    id: unpromoted.subject_id,
-                                    name: unpromoted.name
-                                }
-                                element.subjects.push(temp);
-                                return;
-                            }
-                        });
-
-                        this.steps[3] = 0;
-                        this.steps[4] = 1;
-                    })
-                }
-
-            },
-            error => {
-
-            }
-        )
-    }
-
-    equateSubjects() {
-
-        let temp = {
+        let tempReinmatriculat = {
             name: this.studentSubjectForm.value['specialize'],
             studyYear: this.studentSubjectForm.value['studyYear'],
             rank: this.studentSubjectForm.value['rank'],
@@ -258,52 +224,111 @@ export class AdminStudentSubjectComponent {
             semester: this.studentSubjectForm.value['semester']
         };
 
-        let uv = temp.universityYear.split(' - ');
-        temp.universityYear = (parseInt(uv[0]) - 1) + ' - ' + (parseInt(uv[1]) - 1);
-        
-        this.adminService.getStudyYearId(temp)
+        let uv = tempReinmatriculat.universityYear.split(' - ');
+        tempReinmatriculat.universityYear = (parseInt(uv[0]) - 1) + ' - ' + (parseInt(uv[1]) - 1);
+
+        //get studyYearId for reinmatriculati;
+        this.adminService.getStudyYearId(tempReinmatriculat)
         .takeWhile(() => this.alive)
         .subscribe(
             response => {
-                if (response.length == 0) {
-                    if (response.length == 0) {
-                        this.successMessage = "No subjects to equate";
-                    }
+                if (response.length > 0)
+                    studyYearReinmatriculat = response[0].ID;
+                //get studyYearId for previous year;
+                if (tempReinmatriculat.studyYear == 1) {
+                    this.getUnpromotedSubjectsCall(studyYearReinmatriculat, studyYearLastYear);
                 } else {
+                    let tempLastYear = {
+                        name: this.studentSubjectForm.value['specialize'],
+                        studyYear: this.studentSubjectForm.value['studyYear'],
+                        rank: this.studentSubjectForm.value['rank'],
+                        universityYear: this.studentSubjectForm.value['universityYear'],
+                        semester: this.studentSubjectForm.value['semester']
+                    };
+                    tempLastYear.studyYear = parseInt(tempLastYear.studyYear) - 1;
+                    let uv = tempLastYear.universityYear.split(' - ');
+                    tempLastYear.universityYear = (parseInt(uv[0]) - 1) + ' - ' + (parseInt(uv[1]) - 1);
 
-                    this.adminService.equateSubjects(response[0].ID)
+                    this.adminService.getStudyYearId(tempLastYear)
                     .takeWhile(() => this.alive)
                     .subscribe(
                         response => {
-                            if (response.length == 0) {
-                                this.successMessage = "No subjects to equate";
-                            }
-            
-                            if (response.length > 0) {
-                                this.studentsArray.forEach(element => {
-                                    response.forEach(equate => {
-                                        if (element.id == equate.student_id) {
-                                            element.subjects.forEach(subject => {
-                                                if (subject.id == equate.subject_id) {
-                                                    subject.grade = equate.final_grade;
-                                                }
-                                            });
-                                        }
-                                    })
-                                })
-                            }
+                            if (response.length > 0)
+                                studyYearLastYear = response[0].ID;
+
+                            this.getUnpromotedSubjectsCall(studyYearReinmatriculat, studyYearLastYear);
                         },
                         error => {
-
+                            console.log(error);
                         }
-                    )   
-                }      
-                
+                    )
+                }
+
+                this.steps[3] = 0;
+                this.steps[4] = 1;
+
+            },
+            error => {
+                console.log(error);
+            }
+        )
+    }
+
+    equateSubjects() {
+        let studyYearReinmatriculat = '0';
+        let studyYearLastYear = '0';
+
+        let tempReinmatriculat = {
+            name: this.studentSubjectForm.value['specialize'],
+            studyYear: this.studentSubjectForm.value['studyYear'],
+            rank: this.studentSubjectForm.value['rank'],
+            universityYear: this.studentSubjectForm.value['universityYear'],
+            semester: this.studentSubjectForm.value['semester']
+        };
+
+        let uv = tempReinmatriculat.universityYear.split(' - ');
+        tempReinmatriculat.universityYear = (parseInt(uv[0]) - 1) + ' - ' + (parseInt(uv[1]) - 1);
+
+        //get studyYearId for reinmatriculati;
+        this.adminService.getStudyYearId(tempReinmatriculat)
+        .takeWhile(() => this.alive)
+        .subscribe(
+            response => {
+                if (response.length > 0)
+                    studyYearReinmatriculat = response[0].ID;
+                //get studyYearId for previous year;
+                if (tempReinmatriculat.studyYear == 1) {
+                    this.equateSubjectsCall(studyYearReinmatriculat, studyYearLastYear);
+                } else {
+                    let tempLastYear = {
+                        name: this.studentSubjectForm.value['specialize'],
+                        studyYear: this.studentSubjectForm.value['studyYear'],
+                        rank: this.studentSubjectForm.value['rank'],
+                        universityYear: this.studentSubjectForm.value['universityYear'],
+                        semester: this.studentSubjectForm.value['semester']
+                    };
+                    tempLastYear.studyYear = parseInt(tempLastYear.studyYear) - 1;
+                    let uv = tempLastYear.universityYear.split(' - ');
+                    tempLastYear.universityYear = (parseInt(uv[0]) - 1) + ' - ' + (parseInt(uv[1]) - 1);
+
+                    this.adminService.getStudyYearId(tempLastYear)
+                    .takeWhile(() => this.alive)
+                    .subscribe(
+                        response => {
+                            if (response.length > 0)
+                                studyYearLastYear = response[0].ID;
+                            this.equateSubjectsCall(studyYearReinmatriculat, studyYearLastYear);
+                        },
+                        error => {
+                            console.log(error);
+                        }
+                    )
+                }
                 this.steps[4] = 0;
                 this.steps[5] = 1;
+            },
+            error => {
 
-            }, error => {
-                console.log(error);
             }
         )
     }
@@ -317,6 +342,7 @@ export class AdminStudentSubjectComponent {
                 if (response.errorCode == 0) {
                     this.steps[5] = 0;
                     this.steps[6] = 1;
+                    this.successMessage = response.message;
                 }
             },
             error => {
@@ -349,5 +375,79 @@ export class AdminStudentSubjectComponent {
 
         var rand = Math.floor((Math.random() * temp.length));
         return temp[rand];
+    }
+
+    getUnpromotedSubjectsCall(studyYearReinmatriculat: any, studyYearLastYear: any) {
+        this.adminService.getUnpromotedSubjects(studyYearReinmatriculat, studyYearLastYear)
+        .takeWhile(() => this.alive)
+        .subscribe(
+            response => {
+                if (response.length == 0) {
+                    this.successMessage = "No unpromoted subjects were found";
+                }
+
+                if (response.length > 0) {
+
+                    this.studentsArray.forEach(element => {
+
+                        response.forEach(unpromoted => {
+                            if (unpromoted.studentId == element.id) {
+                                let ok = 1;
+                                element.subjects.forEach(subject => {
+                                    if (subject.id == unpromoted.subjectId) {
+                                        ok = 0;
+                                        return;
+                                    }
+                                })
+                                if (ok == 1) {
+                                    let temp = {
+                                        id: unpromoted.subjectId,
+                                        name: unpromoted.subjectName,
+                                        unpromoted: true
+                                    }
+                                    element.subjects.push(temp);
+                                    return;
+                                }
+                            }
+                        });
+                    })
+                }
+                this.steps[3] = 0;
+                this.steps[4] = 1;
+
+            },
+            error => {
+
+            }
+        )
+    }
+
+    equateSubjectsCall(studyYearReinmatriculat: any, studyYearLastYear: any) {
+        this.adminService.equateSubjects(studyYearReinmatriculat, studyYearLastYear)
+        .takeWhile(() => this.alive)
+        .subscribe(
+            response => {
+                if (response.length == 0) {
+                    this.successMessage = "No subjects to equate";
+                }
+
+                if (response.length > 0) {
+                    this.studentsArray.forEach(element => {
+                        response.forEach(equate => {
+                            if (element.id == equate.student_id) {
+                                element.subjects.forEach(subject => {
+                                    if (subject.id == equate.subject_id) {
+                                        subject.grade = equate.final_grade;
+                                    }
+                                });
+                            }
+                        })
+                    })
+                }
+            },
+            error => {
+
+            }
+        )
     }
 }

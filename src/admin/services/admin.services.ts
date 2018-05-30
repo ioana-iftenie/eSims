@@ -133,15 +133,15 @@ export class AdminService {
         .catch(this.errorHandler.handleError);
     }
 
-    getUnpromotedSubjects(studyYearId: any): Observable<any> {
-        let url = '/admins/subjects/get-unpromoted-subjects/' + studyYearId;
+    getUnpromotedSubjects(studyYearIdRenumbered: any, studyYearIdLastYear): Observable<any> {
+        let url = '/admins/subjects/get-unpromoted-subjects/' + studyYearIdRenumbered + '/' + studyYearIdLastYear;
 
         return this.http.get(url, {})
         .catch(this.errorHandler.handleError);
     }
 
-    equateSubjects(studyYearId: any): Observable<any> {
-        let url = '/admins/subjects/equate-subjects/' + studyYearId;
+    equateSubjects(studyYearIdRenumbered: any, studyYearIdLastYear): Observable<any> {
+        let url = '/admins/subjects/equate-subjects/' + studyYearIdRenumbered + '/' + studyYearIdLastYear;
 
         return this.http.get(url, {})
         .catch(this.errorHandler.handleError);
@@ -154,6 +154,7 @@ export class AdminService {
             data: studentSubjects,
             studyYearId: studyYearId
         }
+
         return this.http.post(url, data)
         .catch(this.errorHandler.handleError);
     }
@@ -173,5 +174,68 @@ export class AdminService {
 
         return this.http.post(url, data)
         .catch(this.errorHandler.handleError);
+    }
+
+    getStudyYearsIdWithoutSemester(data: any): Observable<any> {
+        let url = '/admins/students/get-study-years-without-semester';
+
+        return this.http.post(url, data)
+        .catch(this.errorHandler.handleError)
+    }
+
+    getStudentsByStudyYearsId(studyYearS1: any, studyYearS2: any): Observable<any> {
+        let url = '/admins/students/get-students-by-study-years/' + studyYearS1 + '/' + studyYearS2;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError)
+    }
+
+    getStudentsSubjectsForEntireYear(studyYearS1: any, studyYearS2: any): Observable<any> {
+        let url = '/admins/students/get-students-subjects-full-year/' + studyYearS1 + '/' + studyYearS2;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError)
+    }
+
+    updateStudentsSituation(studyYearS1: any, studyYearS2: any, updatedStudentsArray, deleteFinalStudents, toPayArray, isFinalYear: boolean): Observable<any> {
+        let url = '/admins/students/update-students-situation';
+
+        let data = {
+            studyYearIdS1: studyYearS1,
+            studyYearIdS2: studyYearS2,
+            updatedStudentsInfo: updatedStudentsArray,
+            deleteFinalStudents: deleteFinalStudents,
+            toPay: toPayArray,
+            isFinalYear: isFinalYear
+        }
+
+        return this.http.post(url, data)
+        .catch(this.errorHandler.handleError)
+    }
+
+    searchStudent(searchString: string): Observable<any> {
+        let url = '/admins/students/search-student/' + searchString;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError)
+    }
+
+    getStudentInfo(studentId: string): Observable<any> {
+        let url = '/admins/students/get-student-info/' + studentId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError)
+    }
+
+    updateStudentInfo(studentId: string, newData: any): Observable<any> {
+        let url = '/admins/students/update-student-info';
+        
+        let data = {
+            studentId: studentId,
+            studentInfo: newData
+        };
+
+        return this.http.post(url, data)
+        .catch(this.errorHandler.handleError)
     }
 }

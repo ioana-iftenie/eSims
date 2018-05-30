@@ -28,42 +28,6 @@
         }
     }
 
-    .steps-wrapper {
-        display: inline-block;
-        width: 100%;
-        text-align: center;
-
-        .step {
-            display: inline-block;
-            text-align: center;
-            margin-right: 20px;
-            margin-bottom: 30px;
-
-            .round {
-                background: @mediumGray;
-                height: 50px;
-                width: 50px;
-                line-height: 50px;
-                text-align: center;
-                display: inline-block;
-                border-radius: 50%;
-                color: white;
-            }
-
-            .text {
-                font-size: 14px;
-                font-weight: bold;
-            }
-
-            &.active {
-                .round {
-                    background: @mustard;
-                    border: none;
-                }
-            }
-        }
-    }
-
     .show-info {
         display: none;
 
@@ -104,6 +68,10 @@
                 
                 .banner-mustard {
                     background: @mustard;
+                }
+
+                .banner-red {
+                    background: @darkError;
                 }
             }
         }

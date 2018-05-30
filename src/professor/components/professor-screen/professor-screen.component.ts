@@ -181,7 +181,8 @@ export class ProfessorScreenComponent {
                                         }
                                         let temp = {
                                             markTypeName: resp.markTypeName,
-                                            grade: resp.grade
+                                            grade: resp.grade,
+                                            isEquated: true
                                         }
 
                                         student.grades.push(temp);

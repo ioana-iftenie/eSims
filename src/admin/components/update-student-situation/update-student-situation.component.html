@@ -1,0 +1,205 @@
+<admin-navigation [userInfo]='userInfo'></admin-navigation>
+<section class='admin-title-page-wrapper'>
+    <div class='title-wrapper'>
+        <h2 class='page-title'>Students Final Grades</h2>
+    </div>
+</section>
+
+<section class='study-plan-wrapper main-wrapper-admin'>
+    <div class='study-plan'>
+        <form [formGroup]='studyPlanForm'>
+            <h4 class='small-title'>Select Study Plan</h4>
+            <p class='small-text'>Please select from the following dropdowns in order to select the correct study year</p>
+            <p class='small-text'>Note that your action will NOT modify the database.</p>
+            <hr>
+
+            <div class='dropdowns-wrapper row'>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Study Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='studyYear'>
+                            <option *ngFor='let option of studyYearsArray' value='{{ option }}'>{{ option | studyYearFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Degree</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='rank'>
+                            <option *ngFor='let option of ranksArray' value='{{ option }}'>{{ option | rankFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>University Year</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='universityYear'>
+                            <option *ngFor='let option of universityYearsArray' value='{{ option }}'>{{ option }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Specialize</label>
+                    <div class='option-wrapper'>
+                        <select formControlName='specialize'>
+                            <option *ngFor='let option of specializesArray' value='{{ option }}'>{{ option | specializeFormat }}</option>
+                        </select>
+                        <span class='sufix small'>
+                            <i class='fa fa-chevron-down' aria-hidden='true'></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label></label>
+                    <div class='option-wrapper with-button'>
+                        <button class='action-button' (click)='getStudyYearsId()'>Get Study Years</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class='steps-wrapper' *ngIf='showSteps == true'>
+            <div class='step' [class.active]='steps[0] == 1'>
+                <span class='round'>1</span>
+                <div class='text'>Get Students</div>
+            </div>
+
+            <div class='step' [class.active]='steps[1] == 1'>
+                <span class='round'>2</span>
+                <div class='text'>Get Situation</div>
+            </div>
+
+            <div class='step' [class.active]='steps[2] == 1'>
+                <span class='round'>3</span>
+                <div class='text'>Get The Situation For Next Year</div>
+            </div>
+
+            <div class='step' [class.active]='steps[3] == 1'>
+                <span class='round'>4</span>
+                <div class='text'>Update Students</div>
+            </div>
+
+            <div class='step' [class.active]='steps[4] == 1'>
+                <span class='round'>5</span>
+                <div class='text'>Finish</div>
+            </div>
+
+            <hr>
+        </div> 
+        <div *ngIf='steps[4] != 1 && showSteps == true'>
+            <div class='show-info' [class.active]='steps[0] == 1'>
+                <p class='small-text'>Get the students assigned to the study plans selected from above.</p>
+                <button class='action-button' (click)='getStudents()'>Get Students</button>
+            </div>
+
+            <div class='show-info' [class.active]='steps[1] == 1'>
+                <p class='small-text'>Get the students subjects situation for the study plans selected.</p>
+                <p class='small-text'>Will display the total failed and passed subjects.</p>
+                <button class='action-button' (click)='getSituation()'>Get Situation</button>
+            </div>
+
+            <div class='show-info' [class.active]='steps[2] == 1'>
+                <p class='small-text'>Get the student situation for the next year.</p>
+                <p class='small-text'>Will display if the student will be renumbered or not, the subjects he has to redo and taxes he has to pay.</p>
+                <button class='action-button' (click)='getNextYearSituation()'>Get Next Year Situation</button>
+            </div>
+
+            <div class='show-info' [class.active]='steps[3] == 1'>
+                <p class='small-text'>Update the student situation for the next year.</p>
+                <p class='small-text'>Note that this step will affect the database.</p>
+                <button class='action-button' (click)='updateSituation()'>Update Situation</button>
+            </div>
+        </div>
+
+        <div *ngIf='successMessage != null' class='success-wrapper'>
+            <div class='success-message'> {{ successMessage }} </div>
+        </div>
+    
+        <div *ngIf='errorMessage != null' class='error-wrapper'>
+            <div class='error-message'> {{ errorMessage }} </div>
+        </div>
+        
+        <div class='students-table' *ngIf='showStudentsTable == true'>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Student Number</th>
+                        <th>Name</th>
+                        <th>Current Situation</th>
+                        <th>Next Year Situation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let student of studentsArray'>
+                        <td>{{ student.studentId }}</td>
+                        <td>{{ student.studentNumber }}</td>
+                        <td>{{ student.studentName }}</td>
+                        <td *ngIf='student.situation != undefined'>
+                            <div class='passed-wrapper'>
+                                <span class='total'>Passed: {{ student.situation.passed }}</span>
+                                <span class='semester'>Semester I</span>
+                                <span class='passed-subjects subjects' *ngFor='let subjectS1 of student.situation.passedArrayS1'>
+                                    {{ subjectS1.subjectName }}
+                                </span>
+                                <span class='subjects' *ngIf='student.situation.passedArrayS1?.length == 0'>No Passed subjects this semester</span>
+                                <span class='semester'>Semester II</span>
+                                <span class='passed-subjects subjects' *ngFor='let subjectS2 of student.situation.passedArrayS2'>
+                                    {{ subjectS2.subjectName }}
+                                </span>
+                                <span class='subjects' *ngIf='student.situation.passedArrayS2?.length == 0'>No Passed subjects this semester</span>
+                            </div>
+
+                            <div class='failed-wrapper'>
+                                <span class='total'>Failed: {{ student.situation.failed }}</span>
+                                <span class='semester'>Semester I</span>
+                                <span class='passed-subjects subjects' *ngFor='let subjectS1 of student.situation.failedArrayS1'>
+                                    {{ subjectS1.subjectName }}
+                                </span>
+                                <span class='subjects' *ngIf='student.situation.failledArrayS1?.length == 0'>No Failed subjects this semester</span>
+                                <span class='semester'>Semester II</span>
+                                <span class='passed-subjects subjects' *ngFor='let subjectS2 of student.situation.failedArrayS2'>
+                                    {{ subjectS2.subjectName }}
+                                <span class='subjects' *ngIf='student.situation.failledArrayS1?.length == 0'>No PassFailed subjects this semester</span>
+                                </span>
+                            </div>
+                        </td>
+
+                        <td *ngIf='student.situation == undefined'> - </td>
+
+                        <td *ngIf='student.newSituation != undefined' class='next-year-wrapper'>
+                            <div class='next-year-info'>
+                                <span class='restanta'>Next Year Semester  I  Outstandig: {{ student.newSituation.isRestantS1 == 0 ? "False" : "True" }} </span>
+                                <span class='restanta'>Next Year Semester  II  Outstandig: {{ student.newSituation.isRestantS2 == 0 ? "False" : "True" }} </span>
+                                <span class='reinmatriculat'>Next Year Renumbered: {{ student.newSituation.isReinmatriculat == 0 ? "False" : "True" }}</span>
+                            </div>
+
+                            <div class="to-pay-wrapper">
+                                <span class='title'>To pay for next year</span>
+                                <div class='to-pay' *ngFor='let pay of student.newSituation.toPayArray'>
+                                    <span class='name'> {{ pay.debtName }} </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td *ngIf='student.newSituation == undefined'> - </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

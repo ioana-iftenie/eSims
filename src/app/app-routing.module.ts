@@ -21,6 +21,7 @@ import { ViewStudyPlanComponent }       from '../admin/components/subjects/view-
 import { ViewStudentComponent } from '../admin/components/view-student/view-student.component';
 import { AdminStudentSubjectComponent } from '../admin/components/subjects/student-subject/student-subject.component';
 import { AddFinalGradesComponent } from '../admin/components/add-final-grades/add-final-grades.component';
+import { UpdateStudentSituationComponent } from '../admin/components/update-student-situation/update-student-situation.component';
 
 const routes: Routes = [
     {
@@ -78,7 +79,7 @@ const routes: Routes = [
       canActivate: [VerifyAdminService]
     },
     {
-      path: 'admin/view-students',
+      path: 'admin/view-student',
       component: ViewStudentComponent,
       canActivate: [VerifyAdminService]
     },
@@ -90,6 +91,11 @@ const routes: Routes = [
     {
       path: 'admin/add-final-grades',
       component: AddFinalGradesComponent,
+      canActivate: [VerifyAdminService]
+    },
+    {
+      path: 'admin/update-students',
+      component: UpdateStudentSituationComponent,
       canActivate: [VerifyAdminService]
     },
     {

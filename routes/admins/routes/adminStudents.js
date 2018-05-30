@@ -99,8 +99,6 @@ router.post('/import-students', function(req, res, next) {
                                             errorCode: 1,
                                             message: 'Cound not insert student into table!'
                                         }
-                                        
-                                        res.send(responseToSend);
                                     });
                                 } else {
                                     let studentId = result.insertId;
@@ -157,7 +155,6 @@ router.post('/import-students', function(req, res, next) {
                                                                 message: 'Cound not commit!'
                                                             }
                                                             
-                                                            // res.send(responseToSend);
                                                         });
                                                         }
                                                         console.log('Transaction Complete.');
@@ -180,8 +177,6 @@ router.post('/import-students', function(req, res, next) {
                     resolve(responseToSend);
                     reject("Insert went wrong");
                 })
-
-                console.log(response);
 
                 promiseBulkInsert.then(function(response) {
                     if (response != null) {
@@ -208,9 +203,9 @@ router.get('/get-pre-final-grades/:studyYearId', function(req, res) {
     let queryGetStudents = `SELECT SI.ID AS originalId, S.ID AS studentId, S.STUDENT_NUMBER AS studentNumber, CONCAT(S.FIRST_NAME, ' ', S.LAST_NAME) AS studentName 
     , SI.IS_REINMATRICULAT AS isReinmatriculat, SI.IS_RESTANT AS isRestant FROM STUDENT_INFO SI 
     INNER JOIN STUDENT S ON SI.STUDENT_ID = S.ID WHERE SI.STUDY_YEAR_ID = ?`;
-    let queryGetSubjects = `SELECT SS.ID AS originalId, SI.STUDENT_ID AS studentId, SS.SUBJECT_ID AS subjectId, SJ.NAME AS subjectName
+    let queryGetSubjects = `SELECT DISTINCT(SS.ID) AS originalId, SI.STUDENT_ID AS studentId, SS.SUBJECT_ID AS subjectId, SJ.NAME AS subjectName
     FROM STUDENT_INFO SI INNER JOIN STUDENT_SUBJECT SS ON SI.STUDENT_ID = SS.STUDENT_ID
-    INNER JOIN SUBJECT SJ ON SS.SUBJECT_ID = SJ.ID WHERE SI.STUDY_YEAR_ID = ? ORDER BY SI.STUDENT_ID`;
+    INNER JOIN SUBJECT SJ ON SS.SUBJECT_ID = SJ.ID WHERE SS.STUDY_YEAR_ID = ? ORDER BY SI.STUDENT_ID`;
     let queryGetGrades = `SELECT S.ID AS studentId, SJ.ID AS subjectId, SG.GRADE AS finalGrade
     FROM STUDENT_GRADES SG INNER JOIN STUDENT S ON SG.STUDENT_ID = S.ID INNER JOIN SUBJECT SJ ON SG.SUBJECT_ID = SJ.ID WHERE 
     SG.STUDY_YEAR_ID = ? AND SG.GRADE_TYPE = (SELECT ID FROM MARK_TYPE WHERE NAME LIKE "%FINAL GRADE%")`;
@@ -264,4 +259,196 @@ router.post('/add-final-grades', function(req, res) {
         });  
     })  
 })
+
+// -------- Start Routes for Updating Student -------
+
+router.post('/get-study-years-without-semester', function(req, res) {
+    let query = 'SELECT SY.ID, SY.SEMESTER FROM STUDY_YEAR SY INNER JOIN (SELECT ID FROM SPECIALIZE S WHERE S.NAME = ? AND STUDY_YEAR = ? AND RANK = ?) S ON SY.SPECIALIZE_ID = S.ID WHERE SY.UNIVERSITY_YEAR = ?';
+
+    connection.query(query, [req.body.name, req.body.studyYear, req.body.rank, req.body.universityYear, req.body.semester], function(err, result) {
+        if (err) throw err;
+        
+        res.send(result);
+    })
+})
+
+router.get('/get-students-by-study-years/:studyYearS1/:StidyYearS2', function(req, res) {
+    let queryGetStudents = `SELECT DISTINCT(S.ID) AS studentId, S.STUDENT_NUMBER AS studentNumber, 
+    CONCAT(S.FIRST_NAME, ' ', S.LAST_NAME) AS studentName FROM STUDENT_INFO SI 
+    INNER JOIN STUDENT S ON SI.STUDENT_ID = S.ID WHERE SI.STUDY_YEAR_ID = ? OR SI.STUDY_YEAR_ID = ?`;
+
+    connection.query(queryGetStudents, [req.params.studyYearS1, req.params.studyYearS2], function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
+    })
+})
+
+router.get('/get-students-subjects-full-year/:studyYearS1/:studyYearS2', function(req, res) {
+    let query = `SELECT SS.STUDENT_ID AS studentId, SS.STUDY_YEAR_ID AS studyYearId, SS.SUBJECT_ID AS subjectId, 
+    SS.FINAL_GRADE AS finalGrade, S.NAME AS subjectName, SY.SEMESTER AS semester 
+    FROM STUDENT_SUBJECT SS INNER JOIN STUDY_YEAR SY ON SS.STUDY_YEAR_ID = SY.ID
+    INNER JOIN SUBJECT S ON SS.SUBJECT_ID = S.ID 
+    WHERE STUDY_YEAR_ID = ? OR STUDY_YEAR_ID = ?`;
+
+    connection.query(query, [req.params.studyYearS1, req.params.studyYearS2], function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
+    })
+})
+
+router.post('/update-students-situation', function(req, res) {
+    let insertToPay = `INSERT INTO TO_PAY (NAME, STUDENT_ID, STUDY_YEAR_ID, AMOUNT, CREATED_DATE, LAST_UPDATES, PAY_UNTILL, IS_PAYED) VALUES ?`;
+
+    let insertAuditQuery = `INSERT INTO STUDENT_INFO_AUDIT  (STUDENT_ID, STUDY_YEAR_ID, IS_BURSIER, IS_EXMATRICULAT, IS_RESTANT, IS_BUGETAR, IS_REINMATRICULAT, GROUP_NAME) 
+    SELECT STUDENT_ID, STUDY_YEAR_ID, IS_BURSIER, IS_EXMATRICULAT, IS_RESTANT, IS_BUGETAR, IS_REINMATRICULAT, GROUP_NAME FROM STUDENT_INFO  SI WHERE SI.STUDY_YEAR_ID = ? OR SI.STUDY_YEAR_ID = ?`;
+
+    let deleteStudentsQuery = `DELETE FROM STUDENT_INFO WHERE (STUDY_YEAR_ID, STUDENT_ID) IN (?)`;
+
+    promiseQuery = new Promise(function(resolve, reject) {
+
+        let queries = '';
+
+        req.body.updatedStudentsInfo.forEach(function (item) {
+            queries += mysql.format("UPDATE STUDENT_INFO SET STUDY_YEAR_ID = ?, IS_RESTANT = ?, IS_REINMATRICULAT = ? WHERE STUDENT_ID = ? AND STUDY_YEAR_ID = ?; ", item);
+        });
+    
+        resolve(queries);
+        reject("Something went wrong.");
+    })
+
+    promiseQuery.then(function(response) {
+
+        connection.query(insertToPay, [req.body.toPay], function(err, result) {
+            if (err) throw err;
+
+            if (req.body.isFinalYear == true) {
+                connection.query(insertAuditQuery, [req.body.studyYearIdS1, req.body.studyYearIdS2], function(err, result) {
+                    if (err) throw err;
+
+                    connection.query(deleteStudentsQuery, [req.body.deleteFinalStudents], function(err, result) {
+                        if (err) throw err;
+
+                        connection.query(response, function(err, result) {
+                            if (err) throw err;
+                
+                            let toSend = {
+                                errorCode: 0,
+                                message: 'Student Info was updated successfuly and the students in final year were deleted.'
+                            }
+
+                            res.send(toSend);
+                        });  
+                    })
+                })
+            } else {
+                connection.query(insertAuditQuery, [req.body.studyYearIdS1, req.body.studyYearIdS2], function(err, result) {
+                    if (err) throw err;
+
+                    connection.query(response, function(err, result) {
+                        if (err) throw err;
+            
+                        let toSend = {
+                            errorCode: 0,
+                            message: 'Student Info was updated successfuly.'
+                        }
+
+                        res.send(toSend);
+                    });  
+                });
+            }
+        })
+    })  
+
+})
+
+// -------- End Routes for Updating Student ---------
+
+router.get('/search-student/:searchString', function(req, res) {
+    let query = `SELECT ID AS id, CONCAT(FIRST_NAME , ' ', LAST_NAME) AS name, STUDENT_NUMBER AS studentNumber 
+    FROM STUDENT WHERE FIRST_NAME LIKE ? OR LAST_NAME LIKE ?`;
+
+    connection.query(query, ['%' + req.params.searchString + '%', '%' + req.params.searchString + '%'], function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
+    })
+})
+
+router.get('/get-student-info/:studentId', function(req, res) {
+    let queryGetStudent = `SELECT *, L.NAME AS languageName FROM STUDENT  S INNER JOIN LANGUAGE L ON L.ID = S.LANGUAGE_ID WHERE S.ID = ?`
+    let queryGetStudentInfo = `SELECT * FROM STUDENT_INFO SI INNER JOIN STUDY_YEAR SY ON SY.ID = SI.STUDY_YEAR_ID 
+    INNER JOIN SPECIALIZE S ON S.ID = SY.SPECIALIZE_ID WHERE SI.STUDENT_ID = ?`;
+    let queryGetStudentInfoAudit = `SELECT * FROM STUDENT_INFO_AUDIT SI INNER JOIN STUDY_YEAR SY ON SY.ID = SI.STUDY_YEAR_ID 
+    INNER JOIN SPECIALIZE S ON S.ID = SY.SPECIALIZE_ID WHERE SI.STUDENT_ID = ?`;
+    let queryGetStudentSubjects = `SELECT SS.ID AS originalId, SS.SUBJECT_ID AS subjectId, SS.STUDENT_ID AS studentId, SS.STUDY_YEAR_ID AS studyYearId, SS.FINAL_GRADE AS finalGrade, SJ.NAME AS subjectName 
+    FROM STUDENT_SUBJECT SS INNER JOIN SUBJECT SJ ON SJ.ID = SS.SUBJECT_ID 
+    WHERE SS.STUDENT_ID = ? ORDER BY SS.STUDY_YEAR_ID`;
+    let queryGetStudentGrades = `SELECT SG.ID AS originalId, SG.STUDENT_ID AS studentId, SG.SUBJECT_ID AS subjectId,
+    SG.STUDY_YEAR_ID AS studyYearId, SG.GRADE AS grade, MT.NAME AS markType 
+    FROM STUDENT_GRADES SG INNER JOIN MARK_TYPE MT ON SG.GRADE_TYPE = MT.ID 
+    WHERE SG.STUDENT_ID = ? ORDER BY SG.STUDY_YEAR_ID`;
+    let queryGetStudentToPay = `SELECT * FROM TO_PAY WHERE STUDENT_ID = ?`;
+    
+    let data = {
+        student: null,
+        studentInfo: null,
+        studentInfoAudit: null,
+        studentSubjects: null,
+        studentGrades: null,
+        studentToPay: null
+    };
+
+    
+    connection.query(queryGetStudent, [req.params.studentId], function(err, result) {
+        if (err) throw err;
+
+        data.student = result;
+
+        connection.query(queryGetStudentInfo, [req.params.studentId], function(err, result) {
+            if (err) throw err;
+
+            data.studentInfo = result;
+
+            connection.query(queryGetStudentInfoAudit, [req.params.studentId], function(err, result) {
+                if (err) throw err;
+    
+                data.studentInfoAudit = result;
+             
+                connection.query(queryGetStudentSubjects, [req.params.studentId], function(err, result) {
+                    if (err) throw err;
+        
+                    data.studentSubjects = result;
+                    
+                    connection.query(queryGetStudentGrades, [req.params.studentId], function(err, result) {
+                        if (err) throw err;
+            
+                        data.studentGrades = result;
+                        
+                        connection.query(queryGetStudentToPay, [req.params.studentId], function(err, result) {
+                            if (err) throw err;
+                
+                            data.studentToPay = result;
+                            
+                            res.send(data);
+                        })
+                        
+                    })  
+                })
+            })
+        })
+    })
+})
+
+router.post('/update-student-info', function(req, res) {
+    let query = `UPDATE STUDENT SET FIRST_NAME = ?, LAST_NAME = ?, MOTHER_NAME = ?, FATHER_NAME = ?, EMAIL = ?, PHONE = ? WHERE ID = ?`;
+    
+    connection.query(query, [req.body.studentInfo.firstName, req.body.studentInfo.lastName, req.body.studentInfo.motherName, req.body.studentInfo.fatherName, req.body.studentInfo.email, req.body.studentInfo.phone, req.body.studentId], function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
+    })
+})
+
 module.exports = router;

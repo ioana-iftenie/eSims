@@ -1,0 +1,87 @@
+@import '../../../assets/less/variables.less';
+
+.students-table {
+    margin-top: 30px;
+
+    tbody tr {
+        font-size: 14px;
+    }
+
+    button {
+        margin-top: 0;
+    }
+
+    .subject.passed {
+        color: @darkGreen;
+    }
+
+    .subject.failed {
+        color: @darkError;
+    }
+
+    .passed-wrapper {
+        background: @lightSuccess;
+        padding: 10px;
+        margin-bottom: 10px;
+
+        .total {
+            display: block;
+            color: @darkGreen;
+            font-weight: bold;
+        }
+    }
+
+    .failed-wrapper {
+        background: @lightError;
+        padding: 10px;
+        margin-bottom: 10px;
+
+        .total {
+            display: block;
+            color: @darkError;
+            font-weight: bold;
+        }
+    }
+
+    .semester {
+        font-weight: bold;
+        font-style: italic;
+        display: block;
+    }
+
+    .subjects {
+        font-size: 10px;
+    }
+
+    .next-year-wrapper {
+        .next-year-info {
+            font-weight: bold;
+            padding: 10px;
+            background: @mustard;
+            margin-bottom: 10px;
+
+            .restanta {
+                display: block;
+            }
+        }
+
+        .to-pay-wrapper {
+            .title {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.link {
+    cursor: pointer;
+    color: @darkGreen;
+}
+
+.show-info {
+    display: none;
+
+    &.active {
+        display: inline;
+    }
+}

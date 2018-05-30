@@ -29,6 +29,8 @@ import { AdminStudentSubjectCardComponent } from './components/cards/subjects/st
 import { AdminStudentSubjectComponent } from './components/subjects/student-subject/student-subject.component';
 import { AddFinalGradesCardCardComponent } from './components/cards/add-final-grades/add-final-grades-card.component';
 import { AddFinalGradesComponent } from './components/add-final-grades/add-final-grades.component';
+import { UpdateStudentSituationCardCardComponent } from './components/cards/update-student-situation/update-student-situation-card.component';
+import { UpdateStudentSituationComponent } from './components/update-student-situation/update-student-situation.component';
 
 
 @NgModule({
@@ -45,13 +47,15 @@ import { AddFinalGradesComponent } from './components/add-final-grades/add-final
     ViewStudyPlanCardComponent,
     AdminStudentSubjectCardComponent,
     AddFinalGradesCardCardComponent,
+    UpdateStudentSituationCardCardComponent,
     CreateUpdateSubjectComponent,
     ViewAllSubjectsComponent,
     StudyPlanComponent,
     ViewStudyPlanComponent,
     ViewStudentComponent,
     AdminStudentSubjectComponent,
-    AddFinalGradesComponent
+    AddFinalGradesComponent,
+    UpdateStudentSituationComponent
   ],
   imports: [
     BrowserModule,
@@ -78,13 +82,15 @@ import { AddFinalGradesComponent } from './components/add-final-grades/add-final
     ViewStudyPlanCardComponent,
     AdminStudentSubjectCardComponent,
     AddFinalGradesCardCardComponent,
+    UpdateStudentSituationCardCardComponent,
     CreateUpdateSubjectComponent,
     ViewAllSubjectsComponent,
     StudyPlanComponent,
     ViewStudyPlanComponent,
     ViewStudentComponent,
     AdminStudentSubjectComponent,
-    AddFinalGradesComponent
+    AddFinalGradesComponent,
+    UpdateStudentSituationComponent
   ],
   bootstrap: []
 })

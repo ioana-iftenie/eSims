@@ -162,6 +162,7 @@
                                             <span>{{ grade.markTypeName }} </span>
                                             <span> - {{ grade.grade }}</span>
                                             <span *ngIf='grade.isNew != undefined'> -  ** NEW **</span>
+                                            <span class='banner banner-mustard'*ngIf='grade.isEquated != undefined'> - ** EQUATED **</span>
                                         </div>
                                     </div>
                                 </div>
