@@ -1,0 +1,74 @@
+@import '../../../assets/less/variables.less';
+
+.student-header-wrapper {
+    background: @darkBlue;
+    padding: 15px;
+    color: @white;
+    margin: 0;
+
+    .logo-wrapper {
+        text-align: right;
+
+        #logo {
+            height: 90px;    
+        }
+    }
+
+    .navigation-wrapper {
+        position: relative;
+
+        .navigation-elements {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+
+            .nav {
+                display: inline-block;
+                height: 50px;
+                line-height: 50px;
+                padding: 0 35px;
+                margin-right: 20px;
+                border: 1px solid @white;
+                cursor: pointer;
+                
+                a {
+                    color: @white;
+                    text-decoration: none;
+                }
+
+                &:hover, &.active {
+                    color: @mustard;
+                    border: 1px solid @mustard;
+                }
+            }
+        }
+    }
+
+    .navigation-right {
+        text-align: right;
+
+        .info-wapper {
+            .info {
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                display: inline;
+
+                i {
+                    font-size: 25px;
+                    margin-left: 15px;
+                }
+            }
+
+            .logo-wrapper {
+                display: inline-block;
+            }
+        }
+    }
+}
+
+.small-banner {
+    height: 5px;
+    background: @mustard;
+    margin-bottom: 20px;
+}

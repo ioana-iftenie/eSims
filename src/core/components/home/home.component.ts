@@ -24,6 +24,7 @@ export class HomeScreenComponent {
     alive: boolean;
 
     userInfo: User;
+    selectedMenu: any = 1;
     
     constructor(private http: HttpClient, private token: TokenInteractionService, private router: Router,
                 private homepageService: HomepageService) {}
@@ -61,5 +62,10 @@ export class HomeScreenComponent {
 
     ngOnDestroy(): void {
         this.alive = false;
+    }
+
+    getMenuSelected(event) {
+        console.log(event)
+        this.selectedMenu = event;
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgClass }           from '@angular/common';
 import { HttpClient }        from '@angular/common/http';
 import { Router }            from '@angular/router';
@@ -27,6 +27,12 @@ export class AdminNavigationComponent {
     
     @Input()
     userInfo: User;
+
+    @Input()
+    selectedMenu: any;
+
+    @Output() 
+    sendMenuSelected = new EventEmitter();
 
     constructor(private http: HttpClient, private token: TokenInteractionService, private router: Router,
                 private sharedServ: SharedService) {
@@ -59,5 +65,13 @@ export class AdminNavigationComponent {
     
     logout(): void {
 		this.token.clear();
+    }
+
+    changeMenuItem(index: any): void {
+        this.emitCloseTable(index);
+    }
+
+    emitCloseTable($event: any) {
+        this.sendMenuSelected.emit($event);
     }
 }

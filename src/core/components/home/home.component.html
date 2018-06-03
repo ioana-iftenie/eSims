@@ -1,6 +1,5 @@
-<admin-navigation *ngIf='isAdmin == true'></admin-navigation>
+<admin-navigation *ngIf='isAdmin == true' [selectedMenu]='selectedMenu' (sendMenuSelected)='getMenuSelected($event)'></admin-navigation>
 
-<admin *ngIf='isAdmin == true'></admin>
+<admin *ngIf='isAdmin == true' [selectedMenu]='selectedMenu'></admin>
 <student *ngIf='isStudent == true'></student>
 <professor *ngIf='isProfessor == true'></professor>
-

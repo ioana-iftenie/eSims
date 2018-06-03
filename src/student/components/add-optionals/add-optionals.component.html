@@ -1,0 +1,27 @@
+<student-navigation [selectedMenuItem]='2'></student-navigation>
+
+<section class='add-subjects-main-content-wrapper'>
+    <div class='group-wrapper' *ngFor='let subjectGroup of subjects; let j = index'>
+        <p class='general-info'>Study Year: {{ subjectGroup.studyYear }} - Semester: {{ subjectGroup.semester }} - Group: {{ subjectGroup.subjectCode }}</p>
+        <div class='group' *ngFor='let subject of subjectGroup.subjects; let i = index'>  
+            <div class=''>
+                <div class="checkbox-custom">
+                    <input type="checkbox" [ngModel]='selectedSubject[j][1] == subject.id' id="{{subjectGroup.subjectCode}}{{i}}" (change)='changeSubject(subjectGroup.subjectCode, subject.id)'/>
+                    <label for="{{subjectGroup.subjectCode}}{{i}}"></label>
+                    <span class='text-checkbox'>{{ subject.name }}</span>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+
+    <div *ngIf='successMessage != null' class='success-wrapper'>
+        <div class='success-message'> {{ successMessage }} </div>
+    </div>
+
+    <div *ngIf='errorMessage != null' class='error-wrapper'>
+        <div class='error-message'> {{ errorMessage }} </div>
+    </div>
+
+    <button class='action-button' *ngIf='subjects.length > 0' (click)='saveSubjects()'>Save</button>
+</section>

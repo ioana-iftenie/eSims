@@ -3,6 +3,7 @@ import { NgModule }                                     from '@angular/core';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } 	from '@angular/common/http';
 import { Http, XHRBackend, RequestOptions }				from '@angular/http';
 import { Router }                          				from '@angular/router';
+import { RouterModule }   								from '@angular/router';
 import { FormsModule } 									from '@angular/forms';
 
 import { ErrorHandlerService }                          from './services/error-handler.service';
@@ -33,7 +34,8 @@ import { SharedModule } from '../shared/shared.module';
 		AdminModule,
 		StudentModule,
 		ProfessorModule,
-		SharedModule
+		SharedModule,
+		RouterModule
 	],
 	exports: [
 		LoaderComponent,

@@ -1,19 +1,35 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule }  from '@angular/platform-browser';
+import { NgModule }       from '@angular/core';
+import { RouterModule }   from '@angular/router';
+import { FormsModule, ReactiveFormsModule }              from '@angular/forms';
 
 import { StudentScreenComponent } from './components/student-screen/student-screen.component';
+import { StudentNavigationComponent } from './components/student-navigation/student-navigation.component';
+import { StudentService } from './services/student.services';
+import { SharedModule } from '../shared/shared.module';
+import { AddOptionalsComponent } from './components/add-optionals/add-optionals.component';
 
 
 @NgModule({
   declarations: [
-    StudentScreenComponent
+    StudentScreenComponent,
+    StudentNavigationComponent,
+    AddOptionalsComponent
   ],
   imports: [
     BrowserModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule
   ],
-  providers: [],
+  providers: [
+    StudentService
+  ],
   exports: [
-    StudentScreenComponent
+    StudentScreenComponent,
+    StudentNavigationComponent,
+    AddOptionalsComponent
   ],
   bootstrap: []
 })

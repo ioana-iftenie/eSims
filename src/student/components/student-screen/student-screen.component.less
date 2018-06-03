@@ -1,0 +1,75 @@
+
+@import '../../../assets/less/variables.less';
+
+.student-main-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: @white;
+    border: 1px solid @mediumGray;
+    padding: 20px;
+    
+    .small-title {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .small-text {
+        font-size: 12px;
+        margin-bottom: 0px;
+        color: @darkGreen;
+    }
+    
+    .student-info-wrapper {
+        .section-title {
+            color: @darkGreen;
+            margin-top: 15px;
+        }
+    }
+
+    .situation-tables {
+        margin-top: 30px;
+
+        .big-label-wrapper {
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            color: @white;
+            font-size: 20px;
+            font-style: italic;
+            cursor: default;
+            margin-bottom: 20px;
+        }
+
+        .student-situation-labels {
+            margin-bottom: 20px;
+        }
+    }
+
+    .current-sutiation-table {
+        .big-label-wrapper {
+            background: @darkGreen;
+        }
+    }
+
+    .last-years-situation-table {
+        .big-label-wrapper {
+            background: @mustard;
+        }
+    }
+
+    .to-pay-situation-table {
+        .big-label-wrapper {
+            background: @darkError;
+        }
+        .no-results {
+            background: @lightError;
+            color: @white;
+            padding: 10px;
+            text-align: center;
+        }
+    }
+
+    table {
+        font-size: 15px;
+    }
+}

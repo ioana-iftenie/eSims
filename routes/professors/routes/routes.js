@@ -12,8 +12,6 @@ router.get('/students/get-full-subjects/:studyYearId/:subjectId', function(req, 
 	FROM STUDENT S INNER JOIN STUDENT_GRADES SG ON S.ID = SG.STUDENT_ID
 	INNER JOIN SUBJECT SJ ON SJ.ID = SG.SUBJECT_ID INNER JOIN MARK_TYPE MT ON MT.ID = SG.GRADE_TYPE WHERE SG.STUDY_YEAR_ID = ? AND SG.SUBJECT_ID = ?`;
 
-    console.log(req.params.studyYearId);
-    console.log(req.params.subjectId);
     connection.query(query, [req.params.studyYearId, req.params.subjectId], function(err, result) {
         if (err) throw err;
 

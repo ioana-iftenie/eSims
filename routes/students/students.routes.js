@@ -7,8 +7,6 @@ const jwt               = require('jsonwebtoken');
 
 const student           = require('./routes/routes');
 
-console.log("here11");
-
 router.use((req, res, next) => {
     var token = req.headers['x-access-token'];
     
@@ -30,7 +28,7 @@ router.use((req, res, next) => {
 	}
 });
 
-// router.use('/ceva', student);
+router.use('/', student);
 
 
 router.use((req, res) => {

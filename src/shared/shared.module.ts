@@ -3,6 +3,7 @@ import { NgModule }                                         from '@angular/core'
 import { FormsModule }                                      from '@angular/forms';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } 	from '@angular/common/http';
 import { Http, XHRBackend, RequestOptions }					from '@angular/http';
+import { RouterModule }   								    from '@angular/router';
 
 import { AdminScreenComponent }     from '../admin/components/admin-screen/admin-screen.component';
 import { AdminNavigationComponent } from './components/admin-navigation/admin-navigation.component';
@@ -28,7 +29,8 @@ import { StudentGroupFilterPipe } from './pipes/filter.groups.pipe';
   imports: [
       BrowserModule,
       FormsModule,
-      HttpClientModule
+      HttpClientModule,
+      RouterModule
   ],
   providers: [
       SharedService

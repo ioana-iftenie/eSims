@@ -19,6 +19,8 @@ export class AdminScreenComponent {
     
     @Input()
     userInfo: User;
+    @Input()
+    selectedMenu: any;
 
     alive: boolean;
 

@@ -1,15 +1,22 @@
 <section class='admin-screen-wrapper main-wrapper-admin'>
     <div class='admin-cards-wrapper row'>
-        <import-students class='col-md-6 card-content'></import-students>
-        <generate-groups-card class='col-md-6 card-content'></generate-groups-card>
+        <!-- Student cards -->
+        <import-students class='col-md-6 card-content' *ngIf='selectedMenu == 1'></import-students>
+        <view-student-card class='col-lg-4 col-md-6 card-content' *ngIf='selectedMenu == 1'></view-student-card>
+        <update-student-situation-card class='col-lg-4 col-md-6 card-content' *ngIf='selectedMenu == 1'></update-student-situation-card>
+        <student-subject-card class='col-lg-4 col-md-6 card-content' *ngIf='selectedMenu == 1'></student-subject-card>
 
-        <create-update-subject-card class='col-lg-4  col-md-6 card-content'></create-update-subject-card>
-        <view-all-subjects-card class='col-lg-4 col-md-6 card-content'></view-all-subjects-card>
-        <study-plan-card class='col-lg-4 col-md-6 card-content'></study-plan-card>
-        <view-study-plan-card class='col-lg-4 col-md-6 card-content'></view-study-plan-card>
-        <view-student-card class='col-lg-4 col-md-6 card-content'></view-student-card>
-        <student-subject-card class='col-lg-4 col-md-6 card-content'></student-subject-card>
-        <add-final-grades-card class='col-lg-4 col-md-6 card-content'></add-final-grades-card>
-        <update-student-situation-card class='col-lg-4 col-md-6 card-content'></update-student-situation-card>
+        <!-- Subject Cards -->
+        <create-update-subject-card class='col-lg-4  col-md-6 card-content' *ngIf='selectedMenu == 2'></create-update-subject-card>
+        <view-all-subjects-card class='col-lg-4 col-md-6 card-content' *ngIf='selectedMenu == 2'></view-all-subjects-card>
+
+        <!-- Grades card -->
+        <add-final-grades-card class='col-lg-4 col-md-6 card-content' *ngIf='selectedMenu == 3'></add-final-grades-card>
+
+        <!-- Study Plan cards -->
+        <study-plan-card class='col-lg-4 col-md-6 card-content' *ngIf='selectedMenu == 4'></study-plan-card>
+        <view-study-plan-card class='col-lg-4 col-md-6 card-content' *ngIf='selectedMenu == 4'></view-study-plan-card>
+        
+        
     </div>
 </section>

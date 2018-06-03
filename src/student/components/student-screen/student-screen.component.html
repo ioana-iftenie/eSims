@@ -1,1 +1,428 @@
-<h1> This is student screen</h1>
+<student-navigation [selectedMenuItem]='1'></student-navigation>
+
+<section class='student-main-content-wrapper main-content-wrapper'>
+    <div class='student-info-wrapper' *ngIf='student != null'>
+            
+        <form [formGroup]='studentForm'>
+            <div class='row'>
+
+                <h5 class='col-sm-12 section-title'>General Student Info</h5>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Student Number</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='studentNumber' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-id-badge" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>First Name</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='firstName' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Last Name</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='lastName' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Mother Name</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='motherName' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Father Name</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='fatherName' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Gender</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='gender' disabled>
+                        <span class='sufix small'>
+                            <i *ngIf="studentForm.get('gender').value == 'Female'"class="fa fa-female" aria-hidden="true"></i>
+                            <i *ngIf="studentForm.get('gender').value == 'Male'"class="fa fa-male" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Date of Birth</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='dateOfBirth' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-birthday-cake" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class='row'>
+                <h5 class='col-sm-12 section-title'>Contact Info</h5>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Email</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='email' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Webmail</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='webmail' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Phone</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='phone' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class='row'>
+                <h5 class='col-sm-12 section-title'>Other</h5>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Nationality</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='nationality' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Citizenship</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='citizenship' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Sign up Mark</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='signUpMark' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-4 col-sm-6 col-xs-12'>
+                    <label>Study Language</label>
+                    <div class='option-wrapper'>
+                        <input type='text' formControlName='languageName' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class='current-sutiation-table situation-tables' *ngFor='let thisYear of currentYear; let i = index'>
+            <div class='big-label-wrapper'>
+                {{ thisYear.specialize | specializeFormat }} - {{ thisYear.universityYear }} - {{ thisYear.rank | rankFormat }} - {{ thisYear.studyYear | studyYearFormat }} - {{ thisYear.semester | semesterFormat }}
+            </div>
+
+            <div class='student-situation-labels row'>
+                <div class='option col-md-2 col-sm-4'>
+                    <label>Group Name</label>
+                    <div class='option-wrapper'>
+                        <input type='text' [(ngModel)]='currentGroupModel[i]' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-object-group" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Renumbered?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxReinmatriculat{{i}}" [(ngModel)]='currentIsReinmatriculatModel[i]' disabled/>
+                            <label for="checkboxReinmatriculat{{i}}"></label>
+                            <span class='text-checkbox'>Renumbered</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Premium Student?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxBursier{{i}}" [(ngModel)]='currentIsBursierModel[i]' disabled/>
+                            <label for="checkboxBursier{{i}}"></label>
+                            <span class='text-checkbox'>Premium Student</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Bugetar?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxBugetar{{i}}" [(ngModel)]='currentIsBugetarModel[i]' disabled/>
+                            <label for="checkboxBugetar{{i}}"></label>
+                            <span class='text-checkbox'>Is Bugetar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Expelled?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxExmatriculat{{i}}" [(ngModel)]='currentIsExmatriculatModel[i]' disabled />
+                            <label for="checkboxExmatriculat{{i}}"></label>
+                            <span class='text-checkbox'>Is Expelled</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Restant?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxRestant{{i}}" [(ngModel)]='currentIsRestantModel[i]' disabled />
+                            <label for="checkboxRestant{{i}}"></label>
+                            <span class='text-checkbox'>Is Restant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Subject Id</th>
+                        <th>Subject</th>
+                        <th>Final Grade</th>
+                        <th>Other Grades</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let subject of thisYear.subjects'>
+                        <td>{{ subject.subjectId }}</td>
+                        <td>{{ subject.subjectName }}</td>
+                        <td>{{ subject.finalGrade }}</td>
+                        <td>
+                            <div class='other-grades' *ngIf='subject.grades.length > 0'>
+                                <div class='small-grade' *ngFor='let smallGrade of subject.grades'>
+                                    {{ smallGrade.gradeType }} - {{ smallGrade.grade }}
+                                </div>
+                            </div>
+
+                            <div class='other-grades' *ngIf='subject.grades.length == 0'>
+                                No other grades added.
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class='to-pay-situation-table situation-tables'>
+                <div class='big-label-wrapper'>
+                    Taxes
+                </div>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tax Name</th>
+                            <th>Amount</th>
+                            <th>Created Date</th>
+                            <th>Pay Untill</th>
+                            <th>Is Payed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let toPay of thisYear.toPay'>
+                            <td>{{ toPay.name }}</td>
+                            <td>{{ toPay.amount }}</td>
+                            <td>{{ toPay.createdDate }}</td>
+                            <td>{{ toPay.payUntill }}</td>
+                            <td>{{ toPay.isPayed }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class='no-results' *ngIf='thisYear.toPay.length == 0'>
+                    No Results
+                </div>
+            </div>
+        </div>
+
+
+        <div class='last-years-situation-table situation-tables' *ngFor='let lastYear of lastYears; let i = index'>
+            <div class='big-label-wrapper'>
+                {{ lastYear.specialize | specializeFormat }} - {{ lastYear.universityYear }} - {{ lastYear.rank | rankFormat }} - {{ lastYear.studyYear | studyYearFormat }} - {{ lastYear.semester | semesterFormat }}
+            </div>
+
+            <div class='student-situation-labels row'>
+                <div class='option col-md-2 col-sm-4'>
+                    <label>Group Name</label>
+                    <div class='option-wrapper'>
+                        <input type='text' [(ngModel)]='lastYearsGroupModel[i]' disabled>
+                        <span class='sufix small'>
+                            <i class="fa fa-object-group" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Renumbered?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxReinmatriculat{{i}}LY" [(ngModel)]='lastYearsIsReinmatriculatModel[i]' disabled/>
+                            <label for="checkboxReinmatriculat{{i}}LW"></label>
+                            <span class='text-checkbox'>Renumbered</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Premium Student?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxBursier{{i}}LY" [(ngModel)]='lastYearsIsBursierModel[i]' disabled />
+                            <label for="checkboxBursier{{i}}LY"></label>
+                            <span class='text-checkbox'>Premium Student</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Bugetar?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxBugetar{{i}}LY" [(ngModel)]='lastYearsIsBugetarModel[i]' disabled/>
+                            <label for="checkboxBugetar{{i}}LY"></label>
+                            <span class='text-checkbox'>Is Bugetar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Expelled?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxExmatriculat{{i}}LY" [(ngModel)]='lastYearsIsExmatriculatModel[i]' disabled />
+                            <label for="checkboxExmatriculat{{i}}LY"></label>
+                            <span class='text-checkbox'>Is Expelled</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='option col-md-2'>
+                    <label>Is Restant?</label>
+                    <div class=''>
+                        <div class="checkbox-custom">
+                            <input type="checkbox" id="checkboxRestant{{i}}LY" [(ngModel)]='lastYearsIsRestantModel[i]' disabled />
+                            <label for="checkboxRestant{{i}}LY"></label>
+                            <span class='text-checkbox'>Is Restant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Subject Id</th>
+                        <th>Subject</th>
+                        <th>Final Grade</th>
+                        <th>Other Grades</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor='let subject of lastYear.subjects'>
+                        <td>{{ subject.subjectId }}</td>
+                        <td>{{ subject.subjectName }}</td>
+                        <td>{{ subject.finalGrade }}</td>
+                        <td>
+                            <div class='other-grades' *ngIf='subject.grades.length > 0'>
+                                <div class='small-grade' *ngFor='let smallGrade of subject.grades'>
+                                    {{ smallGrade.gradeType }} - {{ smallGrade.grade }}
+                                </div>
+                            </div>
+
+                            <div class='other-grades' *ngIf='subject.grades.length == 0'>
+                                No other grades added.
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class='to-pay-situation-table situation-tables'>
+                <div class='big-label-wrapper'>
+                    Taxes
+                </div>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tax Name</th>
+                            <th>Amount</th>
+                            <th>Created Date</th>
+                            <th>Pay Untill</th>
+                            <th>Is Payed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let toPay of lastYear.toPay'>
+                            <td>{{ toPay.name }}</td>
+                            <td>{{ toPay.amount }}</td>
+                            <td>{{ toPay.createdDate }}</td>
+                            <td>{{ toPay.payUntill }}</td>
+                            <td>{{ toPay.isPayed }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class='no-results' *ngIf='lastYear.toPay?.length == 0'>
+                    No Results
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

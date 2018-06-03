@@ -2,7 +2,7 @@
 
     <div class='admin-info'>
         <div class='img-holder'>
-            <a href='/home'>
+            <a routerLink='/home'>
                 <i class="fa fa-user-circle-o admin" aria-hidden="true"></i>
             </a>
             <div class='info margin-t-15'>
@@ -21,7 +21,7 @@
     </div>
 
     <div class='menu-holder' [class.menu-hide-navigation]='hideNavigation'>
-        <div class='one-card active'>
+        <div class='one-card' [class.active]='selectedMenu == 1' (click)='changeMenuItem(1)'>
             <div class='card-holder'>
                 <i class='icon fa fa-graduation-cap'></i>
                 <span class='menu-item'>
@@ -30,38 +30,38 @@
             </div>
         </div>
 
-        <div class='one-card'>
+        <!-- <div class='one-card'>
             <div class='card-holder'>
                 <i class='icon fa fa-code'></i>
                 <span class='menu-item'>
                     Professors
                 </span>
             </div>
-        </div>
+        </div> -->
 
-        <div class='one-card'>
+        <div class='one-card' [class.active]='selectedMenu == 2' (click)='changeMenuItem(2)'>
             <div class='card-holder'>
-                <i class='icon fa fa-users'></i>
+                <i class='icon fa fa-bell-o'></i>
                 <span class='menu-item'>
-                    Groups
+                    Subjects
                 </span>
             </div>
         </div>
 
-        <div class='one-card'>
+        <div class='one-card' [class.active]='selectedMenu == 3' (click)='changeMenuItem(3)'>
             <div class='card-holder'>
-                <i class='icon fa fa-dot-circle-o'></i>
+                <i class='icon fa fa-sort-numeric-desc'></i>
                 <span class='menu-item'>
-                    Marks
+                    Grades
                 </span>
             </div>
         </div>
 
-        <div class='one-card'>
+        <div class='one-card' [class.active]='selectedMenu == 4' (click)='changeMenuItem(4)'>
             <div class='card-holder'>
-                <i class='icon fa fa-superpowers'></i>
+                <i class='icon fa fa-columns'></i>
                 <span class='menu-item'>
-                    Admin
+                    Study Plan
                 </span>
             </div>
         </div>
