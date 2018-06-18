@@ -175,7 +175,8 @@
                                     <span>{{ subject.name }}</span>
                                     <span *ngIf='subject.optionalGroup' class='banner banner-mustard'> Group - {{ subject.optionalGroup }}</span>
                                     <span *ngIf='subject.grade' class='banner banner-green'> Grade - {{ subject.grade }}</span>
-                                    <span *ngIf='subject.unpomoted' class='banner banner-red'> Unpromoted</span>
+                                    <span *ngIf='subject.unpromoted' class='banner banner-red'> Unpromoted</span>
+                                    <span *ngIf='!subject.unpromoted' class='banner banner-blue'> Mandatory</span>
                                 </div>
                             </div>
                         </div>

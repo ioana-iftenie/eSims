@@ -23,6 +23,13 @@ export class ProfessorService {
         .catch(this.errorHandler.handleError);
     }
 
+    getSubjectsList(studyYear: any, rank: any, semester: any, specialize: any): Observable<any> {
+        let url = '/professors/get-subject-list/' + studyYear + '/' + rank + '/' + semester + '/' + specialize;
+
+        return this.http.get(url)
+        .catch(this.errorHandler.handleError);
+    }
+
     getMarkTypes(): Observable<any> {
         let url = '/professors/get-mark-types';
 

@@ -45,7 +45,7 @@
                     <div class='option col-md-4 col-sm-6 col-xs-12'>
                         <label>Student Number</label>
                         <div class='option-wrapper'>
-                            <input type='text' formControlName='studentNumber' disabled>
+                            <input type='text' formControlName='studentNumber' >
                             <span class='sufix small'>
                                 <i class="fa fa-id-badge" aria-hidden="true"></i>
                             </span>
@@ -95,7 +95,7 @@
                     <div class='option col-md-4 col-sm-6 col-xs-12'>
                         <label>Gender</label>
                         <div class='option-wrapper'>
-                            <input type='text' formControlName='gender' disabled>
+                            <input type='text' formControlName='gender' >
                             <span class='sufix small'>
                                 <i *ngIf="studentForm.get('gender').value == 'Female'"class="fa fa-female" aria-hidden="true"></i>
                                 <i *ngIf="studentForm.get('gender').value == 'Male'"class="fa fa-male" aria-hidden="true"></i>
@@ -106,7 +106,7 @@
                     <div class='option col-md-4 col-sm-6 col-xs-12'>
                         <label>Date of Birth</label>
                         <div class='option-wrapper'>
-                            <input type='text' formControlName='dateOfBirth' disabled>
+                            <input type='text' formControlName='dateOfBirth' >
                             <span class='sufix small'>
                                 <i class="fa fa-birthday-cake" aria-hidden="true"></i>
                             </span>
@@ -131,7 +131,7 @@
                     <div class='option col-md-4 col-sm-6 col-xs-12'>
                         <label>Webmail</label>
                         <div class='option-wrapper'>
-                            <input type='text' formControlName='webmail' disabled>
+                            <input type='text' formControlName='webmail' >
                             <span class='sufix small'>
                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                             </span>
@@ -156,7 +156,7 @@
                     <div class='option col-md-4 col-sm-6 col-xs-12'>
                         <label>Nationality</label>
                         <div class='option-wrapper'>
-                            <input type='text' formControlName='nationality' disabled>
+                            <input type='text' formControlName='nationality' >
                             <span class='sufix small'>
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                             </span>
@@ -166,7 +166,7 @@
                     <div class='option col-md-4 col-sm-6 col-xs-12'>
                         <label>Citizenship</label>
                         <div class='option-wrapper'>
-                            <input type='text' formControlName='citizenship' disabled>
+                            <input type='text' formControlName='citizenship' >
                             <span class='sufix small'>
                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                             </span>
@@ -176,7 +176,7 @@
                     <div class='option col-md-4 col-sm-6 col-xs-12'>
                         <label>Sign up Mark</label>
                         <div class='option-wrapper'>
-                            <input type='text' formControlName='signUpMark' disabled>
+                            <input type='text' formControlName='signUpMark' >
                             <span class='sufix small'>
                                 <i class="fa fa-phone" aria-hidden="true"></i>
                             </span>
@@ -186,7 +186,7 @@
                     <div class='option col-md-4 col-sm-6 col-xs-12'>
                         <label>Study Language</label>
                         <div class='option-wrapper'>
-                            <input type='text' formControlName='languageName' disabled>
+                            <input type='text' formControlName='languageName'>
                             <span class='sufix small'>
                                 <i class="fa fa-phone" aria-hidden="true"></i>
                             </span>
@@ -213,34 +213,34 @@
                     </div>
  
                     <div class='option col-md-2'>
-                        <label>Is Renumbered?</label>
+                        <label>Is Reenrolled?</label>
                         <div class=''>
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="checkboxReinmatriculat{{i}}" [(ngModel)]='currentIsReinmatriculatModel[i]' disabled/>
                                 <label for="checkboxReinmatriculat{{i}}"></label>
-                                <span class='text-checkbox'>Renumbered</span>
+                                <span class='text-checkbox'>Reenrolled</span>
                             </div>
                         </div>
                     </div>
 
                     <div class='option col-md-2'>
-                        <label>Is Premium Student?</label>
+                        <label>Has Scholarship?</label>
                         <div class=''>
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="checkboxBursier{{i}}" [(ngModel)]='currentIsBursierModel[i]' />
                                 <label for="checkboxBursier{{i}}"></label>
-                                <span class='text-checkbox'>Premium Student</span>
+                                <span class='text-checkbox'>Has Scholarship</span>
                             </div>
                         </div>
                     </div>
 
                     <div class='option col-md-2'>
-                        <label>Is Bugetar?</label>
+                        <label>Is Budgetary?</label>
                         <div class=''>
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="checkboxBugetar{{i}}" [(ngModel)]='currentIsBugetarModel[i]' />
                                 <label for="checkboxBugetar{{i}}"></label>
-                                <span class='text-checkbox'>Is Bugetar</span>
+                                <span class='text-checkbox'>Is Budgetary</span>
                             </div>
                         </div>
                     </div>
@@ -257,12 +257,12 @@
                     </div>
 
                     <div class='option col-md-2'>
-                        <label>Is Restant?</label>
+                        <label>Has Unpromoted Subjects?</label>
                         <div class=''>
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="checkboxRestant{{i}}" [(ngModel)]='currentIsRestantModel[i]' disabled />
                                 <label for="checkboxRestant{{i}}"></label>
-                                <span class='text-checkbox'>Is Restant</span>
+                                <span class='text-checkbox'>Has Unpromoted Subjects</span>
                             </div>
                         </div>
                     </div>
@@ -298,13 +298,13 @@
 
                 <div class='to-pay-situation-table situation-tables'>
                     <div class='big-label-wrapper'>
-                        Taxes
+                        Fees
                     </div>
 
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Tax Name</th>
+                                <th>Fee Name</th>
                                 <th>Amount</th>
                                 <th>Created Date</th>
                                 <th>Pay Untill</th>
@@ -350,7 +350,7 @@
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="checkboxReinmatriculat{{i}}LY" [(ngModel)]='lastYearsIsReinmatriculatModel[i]' disabled/>
                                 <label for="checkboxReinmatriculat{{i}}LW"></label>
-                                <span class='text-checkbox'>Renumbered</span>
+                                <span class='text-checkbox'>Reenrolled</span>
                             </div>
                         </div>
                     </div>
@@ -361,7 +361,7 @@
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="checkboxBursier{{i}}LY" [(ngModel)]='lastYearsIsBursierModel[i]' />
                                 <label for="checkboxBursier{{i}}LY"></label>
-                                <span class='text-checkbox'>Premium Student</span>
+                                <span class='text-checkbox'>Has Scholarship</span>
                             </div>
                         </div>
                     </div>
@@ -372,7 +372,7 @@
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="checkboxBugetar{{i}}LY" [(ngModel)]='lastYearsIsBugetarModel[i]' />
                                 <label for="checkboxBugetar{{i}}LY"></label>
-                                <span class='text-checkbox'>Is Bugetar</span>
+                                <span class='text-checkbox'>Is Budgetary</span>
                             </div>
                         </div>
                     </div>
@@ -394,7 +394,7 @@
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="checkboxRestant{{i}}LY" [(ngModel)]='lastYearsIsRestantModel[i]' disabled />
                                 <label for="checkboxRestant{{i}}LY"></label>
-                                <span class='text-checkbox'>Is Restant</span>
+                                <span class='text-checkbox'>Has Unpromoted Subjects</span>
                             </div>
                         </div>
                     </div>
@@ -430,13 +430,13 @@
 
                 <div class='to-pay-situation-table situation-tables'>
                     <div class='big-label-wrapper'>
-                        Taxes
+                        Fees
                     </div>
 
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Tax Name</th>
+                                <th>Fee Name</th>
                                 <th>Amount</th>
                                 <th>Created Date</th>
                                 <th>Pay Untill</th>

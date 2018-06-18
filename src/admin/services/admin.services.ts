@@ -119,6 +119,13 @@ export class AdminService {
         .catch(this.errorHandler.handleError)
     }
 
+    getStudentsAssignedToSubject(subjectId: any, studyYearId): Observable<any> {
+        let url = '/admins/subjects/get-students-assigned-to-subject/' + subjectId + '/' + studyYearId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError)
+    }
+
     getMandatorySubjectsFromStudyPlan(studyYearId: any): Observable<any> {
         let url = '/admins/subjects/get-mandatory-subjects-from-study-plan/' + studyYearId;
 

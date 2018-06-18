@@ -43,6 +43,17 @@ router.post('/add-grade', function(req, res) {
     })
 })
 
+router.get('/get-subject-list/:studyYear/:rank/:semester/:specialize', function(req, res) {
+    let query = `SELECT S.NAME AS name, S.OPTIONAL_GROUP AS optionalGroup, S.ID AS subjectId FROM SUBJECT S WHERE STATUS_IND = 1 AND
+    STUDY_YEAR <= ? AND RANK = ? AND SEMESTER = ? AND SPECIALIZE = ? ORDER BY STUDY_YEAR DESC`;
+
+    connection.query(query, [req.params.studyYear, req.params.rank.toString(), req.params.semester, req.params.specialize.toString()], function(err, result) {
+        if (err) throw err;
+
+        res.send(result);
+    })
+})
+
 router.get('/get-professor-info/:professorId', function(req, res) {
     let query = "SELECT CONCAT(FIRST_NAME, ' ', LAST_NAME) AS professorName FROM PROFESSOR WHERE ID = ?";
 

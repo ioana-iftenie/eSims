@@ -134,7 +134,16 @@ export class ProfessorScreenComponent {
     }
 
     getSubjects() {
-        this.adminService.getSubjectsFromStudyPlan(this.studyYearId)
+        console.log("here")
+        let temp = {
+            name: this.studyPlanForm.value['specialize'],
+            studyYear: this.studyPlanForm.value['studyYear'],
+            rank: this.studyPlanForm.value['rank'],
+            universityYear: this.studyPlanForm.value['universityYear'],
+            semester: this.studyPlanForm.value['semester']
+        };
+
+        this.professorService.getSubjectsList(temp.studyYear, temp.rank, temp.semester, temp.name)
         .takeWhile(() => this.alive)
         .subscribe(
             response => {
@@ -147,8 +156,12 @@ export class ProfessorScreenComponent {
         )
     }
 
+    getSubjectsForRestantStudents() {
+
+    }
+
     getStudents() {
-        this.adminService.getStudentsByStudyYearId(this.studyYearId)
+        this.adminService.getStudentsAssignedToSubject(this.subjectModel, this.studyYearId)
         .takeWhile(() => this.alive)
         .subscribe(
             response => {
@@ -181,8 +194,7 @@ export class ProfessorScreenComponent {
                                         }
                                         let temp = {
                                             markTypeName: resp.markTypeName,
-                                            grade: resp.grade,
-                                            isEquated: true
+                                            grade: resp.grade
                                         }
 
                                         student.grades.push(temp);

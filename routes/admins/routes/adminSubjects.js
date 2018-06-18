@@ -45,8 +45,6 @@ router.post('/create', function(req, res, next) {
             res.send(response)
         }
     })
-
-    console.log(query.sql)
 });
 
 router.get('/search/:searchString/:allActive', function(req, res) {
@@ -233,10 +231,10 @@ router.get('/get-unpromoted-subjects/:studyYearIdRenumbered/:studyYearIdLastYear
 	// INNER JOIN STUDY_YEAR SY ON SIA.study_year_id = SY.ID inner join student_subject ss on ss.study_year_id = SIA.study_year_id 
     // inner join subject sj on sj.id = ss.subject_id WHERE SIA.is_restant = 1 AND SY.SEMESTER = (SELECT SEMESTER FROM STUDY_YEAR WHERE ID = ?) and ss.final_grade = 4`;
 
-    let getUnpomoted = `SELECT S.ID AS studentId, SS.SUBJECT_ID AS subjectId, SJ.NAME AS subjectName FROM STUDENT S INNER JOIN STUDENT_SUBJECT SS ON S.ID = SS.STUDENT_ID 
-    INNER JOIN SUBJECT SJ ON SS.SUBJECT_ID = SJ.ID WHERE SS.STUDY_YEAR_ID IN (?) AND SS.FINAL_GRADE = 4`;
+    let getUnpomoted = `SELECT S.ID AS studentId, SS.SUBJECT_ID AS subjectId, SJ.NAME AS subjectName FROM STUDENT S
+        INNER JOIN STUDENT_SUBJECT SS ON S.ID = SS.STUDENT_ID 
+        INNER JOIN SUBJECT SJ ON SS.SUBJECT_ID = SJ.ID WHERE SS.STUDY_YEAR_ID IN (?) AND SS.FINAL_GRADE = 4`;
 
-    console.log(req.params);
     let ids = [];
     ids.push(parseInt(req.params.studyYearIdRenumbered));
 
@@ -244,7 +242,6 @@ router.get('/get-unpromoted-subjects/:studyYearIdRenumbered/:studyYearIdLastYear
         ids.push(parseInt(req.params.studyYearIdLastYear));
     }
 
-    console.log(ids);
     connection.query(getUnpomoted, [ids], function(err, result) {
         if (err) throw err;
         
@@ -266,8 +263,6 @@ router.get('/equate-subjects/:studyYearIdRenumbered/:studyYearIdLastYear', funct
         ids.push(parseInt(req.params.studyYearIdLastYear));
     }
 
-    console.log(ids);
-
     connection.query(query, [ids], function(err, result) {
         if (err) throw err;
 
@@ -284,10 +279,9 @@ router.post('/add-student-subjects', function(req, res) {
             subjectGrades: []
         }
 
-
         req.body.data.forEach(student => {
             student.subjects.forEach(subject => {
-                console.log(subject);
+                
                 let temp = [];
                 temp.push(student.id);
                 temp.push(req.body.studyYearId);
@@ -319,7 +313,7 @@ router.post('/add-student-subjects', function(req, res) {
         let query = 'INSERT INTO STUDENT_SUBJECT (STUDENT_ID, STUDY_YEAR_ID, SUBJECT_ID, FINAL_GRADE) VALUES ?';
 
         let queryStudentGrades = 'INSERT INTO STUDENT_GRADES (STUDENT_ID, STUDY_YEAR_ID, SUBJECT_ID, GRADE, GRADE_TYPE) VALUES ?';
-        console.log(response);
+        
         var sql = connection.query(query, [response.subjects], function(err, result) {
             if (err) throw err;
 
@@ -346,5 +340,18 @@ router.post('/add-student-subjects', function(req, res) {
     })
 })
 // -------- End Routes For Students Subject ------
+
+router.get('/get-students-assigned-to-subject/:subjectId/:studyYearId', function(req, res) {
+
+    let query = `SELECT DISTINCT(S.ID) AS id, S.STUDENT_NUMBER AS studentNumber, CONCAT(S.FIRST_NAME, ' ', S.LAST_NAME) AS name, SI.GROUP_NAME AS groupName FROM STUDENT S 
+                INNER JOIN STUDENT_INFO SI ON S.ID = SI.STUDENT_ID 
+                INNER JOIN STUDENT_SUBJECT SS ON SS.STUDENT_ID = S.ID
+                WHERE SS.STUDY_YEAR_ID = ? AND SS.SUBJECT_ID = ?`;
+
+    connection.query(query, [req.params.studyYearId, req.params.subjectId], function(err, result) {
+        if (err) throw err;
+        res.send(result);
+    })
+})
 
 module.exports = router;
