@@ -23,5 +23,15 @@
         <div class='error-message'> {{ errorMessage }} </div>
     </div>
 
+    <div class='already-selected-subjects-wrapper' *ngIf='alreadySelectedSubjects.length > 0'>
+        <div class='subject' *ngFor='let subject of alreadySelectedSubjects'>
+            <div class='info'>
+                 Semester: {{ subject.semester }} - Study Year: {{ subject.studyYear }}
+            </div>
+            <div class='value'>
+                {{ subject.subjectName }} - Group: {{ subject.optionalGroup }}
+            </div>
+        </div>
+    </div>
     <button class='action-button' *ngIf='subjects.length > 0' (click)='saveSubjects()'>Save</button>
 </section>

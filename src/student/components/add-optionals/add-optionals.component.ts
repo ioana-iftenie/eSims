@@ -31,6 +31,8 @@ export class AddOptionalsComponent {
 
     selectedSubject: any[] = [];
 
+    alreadySelectedSubjects: any[] = [];
+
     constructor(private http: HttpClient, private studentService: StudentService, private adminService: AdminService,
                 private token: TokenInteractionService) {
     }
@@ -42,7 +44,7 @@ export class AddOptionalsComponent {
         .takeWhile(() => this.alive)
         .subscribe(
             response => {
-                console.log(response);
+                
                 this.studyYearInfo = response;
 
                 let temp = {
@@ -88,6 +90,27 @@ export class AddOptionalsComponent {
                                         response => {
                                             if (response.errorCode == 1) {
                                                 this.errorMessage = response.message;
+
+                                                this.studentService.getSelectedOptionalSubjects(this.nextStudyYearS1, this.nextStudyYearS2, parseInt(localStorage.getItem('user_id')))
+                                                .takeWhile(() => this.alive)
+                                                .subscribe(
+                                                    response => {
+                                                        console.log(response);
+                                                        
+                                                        response.forEach(selectedSubject => {
+                                                            let temp = {
+                                                                subjectName: selectedSubject.name,
+                                                                studyYear: selectedSubject.study_year,
+                                                                semester: selectedSubject.semester,
+                                                                optionalGroup: selectedSubject.optional_group
+                                                            }
+                                                            this.alreadySelectedSubjects.push(temp);
+                                                        });
+                                                    },
+                                                    error => {
+
+                                                    }
+                                                )
                                             } else {
                                                 response.forEach(subject => {
                                                     if (subject.is_mandatory == 1){
@@ -96,7 +119,7 @@ export class AddOptionalsComponent {
                                                             if (sj.subjectCode == subject.optional_group) {
                                                                 ok = 0;
                                                                 let temp = {
-                                                                    id: subject.id,
+                                                                    id: subject.subject_id,
                                                                     name: subject.name
                                                                 }
                                                                 sj.subjects.push(temp);
@@ -116,7 +139,7 @@ export class AddOptionalsComponent {
                                                                 if (sj.subjectCode == subject.optional_group) {
                                                                     ok = 0;
                                                                     let temp = {
-                                                                        id: subject.id,
+                                                                        id: subject.subject_id,
                                                                         name: subject.name
                                                                     }
                                                                     sj.subjects.push(temp);
@@ -127,7 +150,7 @@ export class AddOptionalsComponent {
                                                     } else {
                                                         let nonMandatory = {
                                                             semester: subject.semester,
-                                                            id: subject.id,
+                                                            id: subject.subject_id,
                                                             name: subject.name
                                                         }
                                                         this.otherSubjects.push();
@@ -138,13 +161,11 @@ export class AddOptionalsComponent {
                                                     let data = [];
                                                     data.push(subject.subjectCode);
                                                     data.push(null);
-                                                    data.push(localStorage.getItem('user_id'));
+                                                    data.push(parseInt(localStorage.getItem('user_id')));
                                                     data.push(subject.studyYearId);
                                                     
                                                     this.selectedSubject.push(data);
                                                 })
-
-                                                console.log(this.selectedSubject);
                                             }
                                         },
                                         error => {
@@ -190,13 +211,13 @@ export class AddOptionalsComponent {
                 ok = 0;
                 return;
             }
-            temp.push(subject[2]);
-            temp.push(subject[1]);
-            temp.push(subject[3]);
+            temp.push(parseInt(subject[2]));
+            temp.push(parseInt(subject[1]));
+            temp.push(parseInt(subject[3]));
 
             array.push(temp);
         });
-        
+        console.log(array);
         if (ok == 1) {
             this.studentService.addOptionalSubjects(array)
             .takeWhile(() => this.alive)

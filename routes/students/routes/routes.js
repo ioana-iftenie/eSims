@@ -30,8 +30,13 @@ router.get('/get-current-stusy-years/:studentId', function(req, res) {
 
 router.get('/get-optional-subjects/:studyYearS1/:studyYearS2/:studyYear/:rank/:specialize', function(req, res) {
     let queryVerify = `SELECT * FROM STUDENT_OPTIONAL_SUBJECT WHERE STUDY_YEAR_ID IN (?)`;
-    let queryGetSubjects = `SELECT * FROM SUBJECT WHERE STUDY_YEAR = ? AND RANK = ? AND SPECIALIZE = ? 
-                            AND OPTIONAL_GROUP IS NOT NULL AND STATUS_IND = 1 ORDER BY SEMESTER`;
+    // let queryGetSubjects = `SELECT * FROM SUBJECT WHERE STUDY_YEAR = ? AND RANK = ? AND SPECIALIZE = ? 
+    //                         AND OPTIONAL_GROUP IS NOT NULL AND STATUS_IND = 1 ORDER BY SEMESTER`;
+
+    let queryGetSubjects = `SELECT * FROM SUBJECT S INNER JOIN STUDY_PLAN SP ON S.ID = SP.SUBJECT_ID 
+                            WHERE (SP.STUDY_YEAR_ID = ? OR SP.STUDY_YEAR_ID = ?) AND S.OPTIONAL_GROUP IS NOT NULL AND 
+                            S.IS_MANDATORY = 1 AND S.STATUS_IND = 1 ORDER BY S.SEMESTER`;
+                            
 
     connection.query(queryVerify, [req.params.studyYearS1, req.params.studyYearS2], function(err, result) {
         if (err) throw err;
@@ -43,7 +48,7 @@ router.get('/get-optional-subjects/:studyYearS1/:studyYearS2/:studyYear/:rank/:s
             }
             res.send(toSend)
         } else {
-            connection.query(queryGetSubjects, [req.params.studyYear, req.params.rank, req.params.specialize], function(err, result) {
+            connection.query(queryGetSubjects, [req.params.studyYearS1, req.params.studyYearS2 ], function(err, result) {
                 if (err) throw err;
 
                 res.send(result);
@@ -53,6 +58,7 @@ router.get('/get-optional-subjects/:studyYearS1/:studyYearS2/:studyYear/:rank/:s
 })
 
 router.post('/add-optional-subjects', function(req, res) {
+    console.log(req.body)
     let query = `INSERT INTO STUDENT_OPTIONAL_SUBJECT (STUDENT_ID, SUBJECT_ID, STUDY_YEAR_ID) VALUES ?`;
 
     connection.query(query, [req.body.subjects], function(err, result) {
@@ -64,6 +70,15 @@ router.post('/add-optional-subjects', function(req, res) {
         };
 
         res.send(toSend);
+    })
+})
+
+router.get('/get-selected-optional-subjects/:studyYearIdS1/:studyYearIdS2/:studentId', function(req, res) {
+    let query = 'SELECT * FROM SUBJECT S INNER JOIN STUDENT_OPTIONAL_SUBJECT SOS ON S.ID = SOS.SUBJECT_ID WHERE SOS.STUDENT_ID = ? AND (SOS.STUDY_YEAR_ID = ? OR SOS.STUDY_YEAR_ID = ?) ORDER BY S.SEMESTER, S.OPTIONAL_GROUP';
+
+    connection.query(query, [req.params.studentId, req.params.studyYearIdS1, req.params.studyYearIdS2], function(err, result) {
+        if (err) throw err;
+        res.send(result)
     })
 })
 module.exports = router;

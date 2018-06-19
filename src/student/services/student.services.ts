@@ -48,4 +48,11 @@ export class StudentService {
         .catch(this.errorHandler.handleError);
     }
 
+    getSelectedOptionalSubjects(studyYearIdS1: any, studyYearIdS2: any, studentId: any): Observable<any> {
+        let url = '/students/get-selected-optional-subjects/' + studyYearIdS1 + '/' + studyYearIdS2 + '/' + studentId;
+
+        return this.http.get(url, {})
+        .catch(this.errorHandler.handleError);
+    }
+
 }
